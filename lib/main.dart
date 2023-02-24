@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Services/DatabaseHelper.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -30,9 +32,10 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    DatabaseHelper databaseHelper = DatabaseHelper.instance;
+    databaseHelper.insert({'toUnlock': 120, 'stars': 20}, 'stage');
+    Future result = databaseHelper.queryAll('stage');
+    print(result);
   }
 
   @override
