@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -13,6 +14,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     Color? backgroundColor = appBarTheme.backgroundColor;
     Widget title = const SizedBox.shrink();
+    Brightness iconBrightness = Brightness.light;
     bool buttonSettings = false;
     bool buttonHome = false;
     bool buttonRefresh = false;
@@ -20,10 +22,12 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       case '/':
         buttonSettings = true;
         backgroundColor = Colors.transparent;
+        iconBrightness = Brightness.dark;
         break;
       case 'settings':
         buttonHome = true;
         backgroundColor = Colors.transparent;
+        iconBrightness = Brightness.dark;
         break;
       case 'stages':
         buttonHome = true;
@@ -70,13 +74,12 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: textTheme.headlineLarge,
         );
         break;
-      default:
-      // print('hello');
     }
     return AppBar(
       backgroundColor: backgroundColor,
       elevation: 0.0,
       toolbarHeight: 70,
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: iconBrightness),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(30.0),
