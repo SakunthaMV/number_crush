@@ -10,16 +10,16 @@ class Star extends StatelessWidget {
       scale: (1.0 / 30.0) * size,
       child: Stack(
         alignment: Alignment.center,
-        children: const [
+        children: [
           Icon(
             Icons.star,
             size: 35.0,
-            color: Color(0xFFB3B334),
+            color: Theme.of(context).colorScheme.outline,
           ),
           Icon(
             Icons.star,
             size: 30,
-            color: Color(0xFFFFFF00),
+            color: Theme.of(context).colorScheme.outlineVariant,
           ),
         ],
       ),
