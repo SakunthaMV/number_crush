@@ -15,26 +15,27 @@ class DatabaseHelper {
   Future<Database> get database async =>
       _database ??= await _initiateDatabase();
 
-  Future _initiateDatabase() async {
+  Future<Database> _initiateDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, _dbName);
+    print(path);
     return await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
   }
 
-  _onCreate(Database db, int version) {
-    db.execute('''
+  _onCreate(Database db, int version) async {
+    await db.execute('''
       CREATE TABLE stage
       (
-        id INTEGER PRIMARY KEY AUTO INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         toUnlock INTEGER,
         stars INTEGER
       )
       ''');
 
-    db.execute('''
+    await db.execute('''
       CREATE TABLE level
       (
-        id INTEGER PRIMARY KEY AUTO INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         stageId INTEGER,
         toUnlock INTEGER,
         stars INTEGER,
@@ -43,10 +44,10 @@ class DatabaseHelper {
       )
       ''');
 
-    db.execute('''
+    await db.execute('''
       CREATE TABLE question
       (
-        id INTEGER PRIMARY KEY AUTO INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         levelId INTEGER,
         questionNumber INTEGER,
         question STRING,
@@ -67,7 +68,6 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> queryAll(table) async {
     Database db = await instance.database;
-    print(db.query(table));
     return await db.query(table);
   }
 
@@ -82,7 +82,3 @@ class DatabaseHelper {
     return await db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 }
-
-DatabaseHelper databaseHelper = DatabaseHelper._privateConstructor();
-Future x = databaseHelper.insert({'toUnlock': 120, 'stars': 20}, 'stage');
-Future result = databaseHelper.queryAll('stage');
