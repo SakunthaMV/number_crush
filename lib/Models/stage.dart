@@ -18,7 +18,7 @@ class Stage {
   }
 
   Map<String, dynamic> toMap() {
-    var map = Map<String, dynamic>();
+    Map<String, dynamic> map = {};
     map['id'] = _id;
     map['toUnlock'] = _toUnlock;
     map['stars'] = _stars;
