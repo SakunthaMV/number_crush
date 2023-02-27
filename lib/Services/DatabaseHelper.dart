@@ -5,8 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static final _dbName = 'appDatabase.db';
-  static final _dbVersion = 1;
+  static const _dbName = 'appDatabase.db';
+  static const _dbVersion = 1;
 
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -18,7 +18,6 @@ class DatabaseHelper {
   Future<Database> _initiateDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, _dbName);
-    print(path);
     return await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
   }
 
