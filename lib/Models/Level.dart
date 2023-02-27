@@ -11,7 +11,7 @@ class Level {
   int get toUnlock => _toUnlock;
   int get stars => _stars;
   int get stageId => _stageId;
-  double get time => _time;
+  double get times => _time;
 
   set stats(int newStars) {
     _stars = newStars;
