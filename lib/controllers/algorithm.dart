@@ -103,7 +103,7 @@ class Algorithm {
     return question;
   }
 
-  Map<int, List<String>> questionsList(int questionNumber) {
+  Map<int, List<String>> _dataList(int questionNumber) {
     Map<int, List<String>> questionsMap = {};
     switch (_questionRange(questionNumber)) {
       case 1:
@@ -196,5 +196,54 @@ class Algorithm {
           return questionsMap;
         }
     }
+  }
+
+  Map<int, List<dynamic>> getQuestions(int questionNumber) {
+    Map<int, List<dynamic>> dataMap = _dataList(questionNumber);
+    Map<int, List<dynamic>> questions = {};
+    for (var entry in dataMap.entries) {
+      String operator = entry.value[2];
+      int result = 0;
+      int operand_1 = int.parse(entry.value[0]);
+      int operand_2 = int.parse(entry.value[1]);
+      if (operator == '+') {
+        result = operand_1 + operand_2;
+      } else if (operator == '-') {
+        if (operand_1 > operand_2) {
+          result = operand_1 - operand_2;
+        } else {
+          result = operand_2 - operand_1;
+        }
+      } else if (operator == '*') {
+        result = operand_1 * operand_2;
+      } else if (operator == '/') {
+        result = operand_1 * operand_2;
+        int temp = result;
+        operand_1 = result;
+        result = temp;
+      } else if (operator == 'squre') {
+        result = pow(operand_1, 2) as int;
+      } else if (operator == 'squreRoot') {
+        result = pow(operand_1, 2) as int;
+        int temp = result;
+        result = operand_1;
+        operand_1 = temp;
+      } else {
+        if (operand_1 > operand_2) {
+          result = pow(operand_1, operand_2) as int;
+        } else {
+          result = pow(operand_2, operand_1) as int;
+          int temp = operand_1;
+          operand_1 = operand_2;
+          operand_2 = temp;
+        }
+        int temp = result;
+        result = operand_2;
+        operand_2 = temp;
+      }
+
+      questions[entry.key] = [operand_1, operator, operand_2, result];
+    }
+    return questions;
   }
 }
