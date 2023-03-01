@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-
 class Algorithm {
   Random random = Random();
 
@@ -110,8 +108,7 @@ class Algorithm {
     switch (_questionRange(questionNumber)) {
       case 1:
         {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[1]['numberOfQuestion'] - 2);
+          int numberOfQuestion = 2;
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[1]);
             questionsMap[i + 1] = question;
