@@ -118,7 +118,7 @@ class Algorithm {
       case 2:
         {
           int numberOfQuestion =
-              2 + random.nextInt(_data[2]['numberOfQuestion'] - 2);
+              2 + random.nextInt(_data[2]['numberOfQuestion'] - 1);
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[2]);
             questionsMap[i + 1] = question;
@@ -128,7 +128,7 @@ class Algorithm {
       case 3:
         {
           int numberOfQuestion =
-              2 + random.nextInt(_data[3]['numberOfQuestion'] - 2);
+              2 + random.nextInt(_data[3]['numberOfQuestion'] - 1);
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[3]);
             questionsMap[i + 1] = question;
@@ -138,7 +138,7 @@ class Algorithm {
       case 4:
         {
           int numberOfQuestion =
-              2 + random.nextInt(_data[4]['numberOfQuestion'] - 2);
+              2 + random.nextInt(_data[4]['numberOfQuestion'] - 1);
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[4]);
             questionsMap[i + 1] = question;
@@ -148,7 +148,7 @@ class Algorithm {
       case 5:
         {
           int numberOfQuestion =
-              2 + random.nextInt(_data[5]['numberOfQuestion'] - 2);
+              2 + random.nextInt(_data[5]['numberOfQuestion'] - 1);
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[5]);
             questionsMap[i + 1] = question;
@@ -158,7 +158,7 @@ class Algorithm {
       case 6:
         {
           int numberOfQuestion =
-              2 + random.nextInt(_data[6]['numberOfQuestion'] - 2);
+              2 + random.nextInt(_data[6]['numberOfQuestion'] - 1);
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[6]);
             questionsMap[i + 1] = question;
@@ -168,7 +168,7 @@ class Algorithm {
       case 7:
         {
           int numberOfQuestion =
-              2 + random.nextInt(_data[7]['numberOfQuestion'] - 2);
+              2 + random.nextInt(_data[7]['numberOfQuestion'] - 1);
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[7]);
             questionsMap[i + 1] = question;
@@ -178,7 +178,7 @@ class Algorithm {
       case 8:
         {
           int numberOfQuestion =
-              2 + random.nextInt(_data[8]['numberOfQuestion'] - 2);
+              2 + random.nextInt(_data[8]['numberOfQuestion'] - 1);
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[8]);
             questionsMap[i + 1] = question;
@@ -188,7 +188,7 @@ class Algorithm {
       default:
         {
           int numberOfQuestion =
-              2 + random.nextInt(_data[8]['numberOfQuestion'] - 2);
+              2 + random.nextInt(_data[8]['numberOfQuestion'] - 1);
           for (int i = 0; i < numberOfQuestion; i++) {
             List<String> question = _questionGenerator(_data[8]);
             questionsMap[i + 1] = question;
@@ -213,6 +213,9 @@ class Algorithm {
           result = operand_1 - operand_2;
         } else {
           result = operand_2 - operand_1;
+          int temp = operand_1;
+          operand_1 = operand_2;
+          operand_2 = temp;
         }
       } else if (operator == '*') {
         result = operand_1 * operand_2;
