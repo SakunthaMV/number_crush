@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
+import 'package:number_crush/Screens/settings.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int? stageNo;
@@ -80,6 +81,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0.0,
       toolbarHeight: 70,
       systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: iconBrightness),
+      automaticallyImplyLeading: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(30.0),
@@ -100,7 +102,13 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       height: 45,
       margin: const EdgeInsets.only(right: 15.0),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          if (icon == Icons.settings) {
+            Navigator.pushNamed(context, Settings.route);
+          } else if (icon == Icons.home) {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          }
+        },
         child: Icon(
           icon,
           size: 27,
