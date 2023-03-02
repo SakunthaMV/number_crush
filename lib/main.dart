@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:number_crush/Screens/settings.dart';
+import 'package:number_crush/Screens/stages.dart';
+
+import 'Screens/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,57 +14,52 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Number Crush',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        useMaterial3: true,
+        colorScheme: const ColorScheme.light(
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          error: Colors.red,
+          background: Color(0xFFF1F2EB),
+          onBackground: Color(0xFFC9D6FB),
+          outline: Color(0xFF1F3C88),
+          outlineVariant: Color(0xFFFFFF00),
+          secondary: Color(0xFF324D94),
+          onSecondary: Color(0xFF041D63),
+          primaryContainer: Color(0xFFA8BDF4),
+        ),
+        splashColor: Colors.transparent,
+        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF112049)),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            shape: const StadiumBorder(),
+            backgroundColor: const Color(0xFF324D94),
+            padding: const EdgeInsets.all(0.0),
+            elevation: 1.0,
+          ),
+        ),
+        textTheme: TextTheme(
+          displayLarge: GoogleFonts.robotoMono(
+            fontSize: 150.0,
+          ),
+          headlineLarge: GoogleFonts.ubuntu(
+            fontSize: 30.0,
+            letterSpacing: 2,
+            color: Colors.white,
+          ),
+          headlineSmall: GoogleFonts.openSans(fontWeight: FontWeight.w600),
+          titleLarge: GoogleFonts.lato(color: const Color(0xFF324D94)),
+          titleMedium: GoogleFonts.roboto(fontWeight: FontWeight.w400),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => const Home(),
+        Settings.route: (context) => const Settings(),
+        Stages.route: (context) => const Stages(),
+      },
     );
   }
 }
