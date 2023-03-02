@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:number_crush/Screens/settings.dart';
 
 import 'Screens/home.dart';
 
@@ -21,18 +22,18 @@ class MyApp extends StatelessWidget {
           onPrimary: Colors.black,
           error: Colors.red,
           background: Color(0xFFF1F2EB),
-          onBackground: Color(0xFFD8DAD3),
+          onBackground: Color(0xFFC9D6FB),
           outline: Color(0xFFB3B334),
           outlineVariant: Color(0xFFFFFF00),
-          secondary: Color(0xFF566246),
-          onSecondary: Color(0xFFA4C2A5),
+          secondary: Color(0xFF324D94),
+          onSecondary: Color(0xFF041D63),
         ),
         splashColor: Colors.transparent,
-        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF4A4A48)),
+        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF112049)),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
-            backgroundColor: const Color(0xFFA4C2A5),
+            backgroundColor: const Color(0xFF324D94),
             padding: const EdgeInsets.all(0.0),
             elevation: 1.0,
           ),
@@ -44,13 +45,14 @@ class MyApp extends StatelessWidget {
             color: Colors.white,
           ),
           headlineSmall: GoogleFonts.openSans(fontWeight: FontWeight.w600),
-          titleLarge: GoogleFonts.lato(color: const Color(0xFFA4C2A5)),
+          titleLarge: GoogleFonts.lato(color: const Color(0xFF324D94)),
           titleMedium: GoogleFonts.roboto(fontWeight: FontWeight.w400),
         ),
       ),
       initialRoute: "/",
       routes: {
         "/": (context) => const Home(),
+        Settings.route: (context) => const Settings(),
       },
     );
   }
