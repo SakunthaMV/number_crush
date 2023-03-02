@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
+import 'package:number_crush/Screens/stages.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -36,7 +37,11 @@ class Home extends StatelessWidget {
             width: width * 0.2,
             height: width * 0.2,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (topic == 'STAGES') {
+                  Navigator.pushNamed(context, Stages.route);
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: colorScheme.secondary,
               ),
