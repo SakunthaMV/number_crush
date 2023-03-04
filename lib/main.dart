@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:number_crush/Screens/settings.dart';
+import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
 
 import 'Screens/home.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           background: Color(0xFFF1F2EB),
           onBackground: Color(0xFFC9D6FB),
           outline: Color(0xFF1F3C88),
-          outlineVariant: Color(0xFFFFFF00),
+          outlineVariant: Color(0xFFB3B334),
           secondary: Color(0xFF324D94),
           onSecondary: Color(0xFF041D63),
           primaryContainer: Color(0xFFA8BDF4),
@@ -52,6 +53,11 @@ class MyApp extends StatelessWidget {
           headlineSmall: GoogleFonts.openSans(fontWeight: FontWeight.w600),
           titleLarge: GoogleFonts.lato(color: const Color(0xFF324D94)),
           titleMedium: GoogleFonts.roboto(fontWeight: FontWeight.w400),
+          labelMedium: GoogleFonts.encodeSans(
+            color: const Color(0xFF1F3C88),
+            fontSize: 13,
+            letterSpacing: 1.5,
+          ),
         ),
       ),
       initialRoute: "/",
@@ -59,6 +65,7 @@ class MyApp extends StatelessWidget {
         "/": (context) => const Home(),
         Settings.route: (context) => const Settings(),
         Stages.route: (context) => const Stages(),
+        StageHome.route: (context) => const StageHome(),
       },
     );
   }
