@@ -33,64 +33,69 @@ class Stages extends StatelessWidget {
     return Container(
       height: 250,
       margin: EdgeInsets.symmetric(vertical: width * 0.02),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        color: colorScheme.primaryContainer,
-        elevation: 5,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18.0),
-          child: Stack(
-            alignment: Alignment.centerRight,
-            children: [
-              CustomPaint(
-                painter: StageShape(),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: width * 0.1),
-                    child: Opacity(
-                      opacity: 0.2,
-                      child: Text(
-                        '${index + 1}',
-                        style: textTheme.displayLarge?.copyWith(
-                          color: colorScheme.onBackground,
+      child: InkWell(
+        onTap: () {},
+        splashColor: Theme.of(context).splashColor,
+        highlightColor: Theme.of(context).splashColor,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          color: colorScheme.primaryContainer,
+          elevation: 5,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18.0),
+            child: Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                CustomPaint(
+                  painter: StageShape(),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: width * 0.1),
+                      child: Opacity(
+                        opacity: 0.2,
+                        child: Text(
+                          '${index + 1}',
+                          style: textTheme.displayLarge?.copyWith(
+                            color: colorScheme.onBackground,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: width * 0.05),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    StarsRow(
-                      size: 30.0,
-                      amount: stars,
-                    ),
-                    StarsRow(
-                      size: 30.0,
-                      amount: 113,
-                      color: colorScheme.primaryContainer,
-                    ),
-                    const SizedBox(
-                      height: 30.0,
-                    ),
-                    Text(
-                      'STAGE ${index + 1}',
-                      style: textTheme.displayLarge?.copyWith(
-                        fontSize: 30.0,
-                        color: colorScheme.primary,
+                Padding(
+                  padding: EdgeInsets.only(right: width * 0.05),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      StarsRow(
+                        size: 30.0,
+                        amount: stars,
                       ),
-                    )
-                  ],
+                      StarsRow(
+                        size: 30.0,
+                        amount: 113,
+                        color: colorScheme.primaryContainer,
+                      ),
+                      const SizedBox(
+                        height: 30.0,
+                      ),
+                      Text(
+                        'STAGE ${index + 1}',
+                        style: textTheme.displayLarge?.copyWith(
+                          fontSize: 30.0,
+                          color: colorScheme.primary,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
