@@ -11,8 +11,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final String? route = ModalRoute.of(context)?.settings.name;
+    final double width = MediaQuery.of(context).size.width;
     final AppBarTheme appBarTheme = Theme.of(context).appBarTheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     Color? backgroundColor = appBarTheme.backgroundColor;
     Widget title = const SizedBox.shrink();
     Brightness iconBrightness = Brightness.light;
@@ -37,7 +39,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: textTheme.headlineLarge,
         );
         break;
-      case 'stage-in':
+      case 'stage-home':
         buttonHome = true;
         title = Row(
           mainAxisSize: MainAxisSize.min,
@@ -46,8 +48,13 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
               'STAGE $stageNo',
               style: textTheme.headlineLarge,
             ),
-            const StarsRow(
-              amount: 10,
+            SizedBox(
+              width: width * 0.05,
+            ),
+            StarsRow(
+              starBoder: colorScheme.outlineVariant,
+              amount: 12,
+              borderSize: 5.0,
             ),
           ],
         );
