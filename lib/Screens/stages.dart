@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
+import 'package:number_crush/Screens/stage_home.dart';
 
 class Stages extends StatelessWidget {
   static String route = 'stages';
@@ -34,7 +35,13 @@ class Stages extends StatelessWidget {
       height: 250,
       margin: EdgeInsets.symmetric(vertical: width * 0.02),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            StageHome.route,
+            arguments: StageHomeArguments(index + 1, 17),
+          );
+        },
         splashColor: Theme.of(context).splashColor,
         highlightColor: Theme.of(context).splashColor,
         child: Card(
@@ -78,7 +85,7 @@ class Stages extends StatelessWidget {
                       ),
                       StarsRow(
                         size: 30.0,
-                        amount: 113,
+                        amount: 150,
                         color: colorScheme.primaryContainer,
                       ),
                       const SizedBox(
