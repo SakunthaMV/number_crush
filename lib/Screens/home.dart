@@ -16,17 +16,36 @@ class Home extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            homeRow(context, Icons.play_arrow, 'PLAY',
-                '${level < 2 ? 'Start' : 'Continue'} Your Journey'),
-            homeRow(context, Icons.event, 'STAGES', 'Currunt Level: $level'),
-            homeRow(context, Icons.wallpaper, 'BACKGROUNDS', 'Currunt: $backgroundStyle')
+            homeRow(
+              context,
+              Icons.play_arrow,
+              'PLAY',
+              '${level < 2 ? 'Start' : 'Continue'} Your Journey',
+            ),
+            homeRow(
+              context,
+              Icons.event,
+              'STAGES',
+              'Currunt Level: $level',
+            ),
+            homeRow(
+              context,
+              Icons.wallpaper,
+              'BACKGROUNDS',
+              'Currunt: $backgroundStyle',
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget homeRow(BuildContext context, IconData icon, String topic, String subTopic) {
+  Widget homeRow(
+    BuildContext context,
+    IconData icon,
+    String topic,
+    String subTopic,
+  ) {
     final double width = MediaQuery.of(context).size.width;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Padding(
@@ -53,21 +72,30 @@ class Home extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(left: width * 0.05),
-            child: FittedBox(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    topic,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  Text(
-                    subTopic,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                  ),
-                ],
+            child: InkWell(
+              splashColor: Theme.of(context).splashColor,
+              highlightColor: Theme.of(context).splashColor,
+              onTap: () {
+                if (topic == 'STAGES') {
+                  Navigator.pushNamed(context, Stages.route);
+                }
+              },
+              child: FittedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      topic,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    Text(
+                      subTopic,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
