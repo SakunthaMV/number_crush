@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 
 class DatabaseHelper {
   static const _dbName = 'appDatabase.db';
-  static const _dbVersion = 1;
+  static const _dbVersion = 3;
 
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -22,6 +22,16 @@ class DatabaseHelper {
   }
 
   _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE setting
+      (
+        key STRING PRIMARY KEY ,
+        value STRING
+      );
+
+      INSERT INTO setting VALUES('vaibration','ON');
+      INSERT INTO setting VALUES('sound','ON');
+      ''');
     await db.execute('''
       CREATE TABLE stage
       (
