@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 
 class DatabaseHelper {
   static const _dbName = 'appDatabase.db';
-  static const _dbVersion = 3;
+  static const _dbVersion = 1;
 
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -27,17 +27,15 @@ class DatabaseHelper {
       (
         key STRING PRIMARY KEY ,
         value STRING
-      );
-
-      INSERT INTO setting VALUES('vaibration','ON');
-      INSERT INTO setting VALUES('sound','ON');
+      )
       ''');
     await db.execute('''
       CREATE TABLE stage
       (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         toUnlock INTEGER,
-        stars INTEGER
+        stars INTEGER,
+        status STRING
       )
       ''');
 
@@ -47,6 +45,7 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         stageId INTEGER,
         toUnlock INTEGER,
+        status STRING,
         stars INTEGER,
         time FLOAT,
         FOREIGN KEY (stageID) REFERENCES stage (id)
@@ -67,6 +66,14 @@ class DatabaseHelper {
         correctAns INTEGER,
         FOREIGN KEY (levelId) REFERENCES level (id)
       )
+      ''');
+
+    await db.rawInsert(''' 
+      INSERT INTO setting VALUES('vaibration','ON');
+     ''');
+
+    await db.rawInsert('''
+      INSERT INTO setting VALUES('sound','OFF');
       ''');
   }
 

@@ -4,6 +4,7 @@ class Level {
   int _stageId = 0;
   int _stars = 0;
   double _time = 0.0;
+  String _status = 'Locked';
 
   Level(this._id, this._toUnlock, this._stageId);
 
@@ -11,6 +12,7 @@ class Level {
   int get toUnlock => _toUnlock;
   int get stars => _stars;
   int get stageId => _stageId;
+  String get status => _status;
   double get times => _time;
 
   set stats(int newStars) {
@@ -28,6 +30,7 @@ class Level {
     map['stars'] = _stars;
     map['stageId'] = _stageId;
     map['time'] = _time;
+    map['status'] = _status;
 
     return map;
   }
@@ -38,5 +41,6 @@ class Level {
     _stars = map['stars'];
     _stageId = map['stageId'];
     _time = map['time'];
+    _status = map['status'];
   }
 }
