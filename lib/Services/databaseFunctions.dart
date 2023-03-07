@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:sqflite/sqflite.dart';
+import '../Models/Level.dart';
 import '../Models/stage.dart';
 import 'DatabaseHelper.dart';
 
@@ -24,6 +27,16 @@ class DatabaseFunctions {
     return await db.rawQuery(''' SELECT COUNT(id) AS stages FROM stage ''');
   }
 
+  Future getToUnlockStageStars() async {
+    Database db = await dbHelper.database;
+    return await db.rawQuery(''' SELECT id,toUnlock FROM stage''');
+  }
+
+  Future getAchievedStarsOfStage() async {
+    Database db = await dbHelper.database;
+    return await db.rawQuery(''' SELECT id,stars FROM stage''');
+  }
+
   Future addStage(Stage stage) async {
     Database db = await dbHelper.database;
     return await db.rawInsert(
@@ -31,8 +44,49 @@ class DatabaseFunctions {
         [stage.toUnlock, stage.stars, stage.status]);
   }
 
-  Future getAll() async {
+  Future getAll(String tableName) async {
     Database db = await dbHelper.database;
-    return await db.rawQuery(''' SELECT * FROM stage ''');
+    return await db.rawQuery(''' SELECT * FROM ${tableName} ''');
+  }
+
+  Future getStageStars(int stageId) async {
+    Database db = await dbHelper.database;
+    return await db
+        .rawQuery(''' SELECT stars FROM stage WHERE id = ? ''', [stageId]);
+  }
+
+  //Level table functions
+  Future addLevel(Level level) async {
+    Database db = await dbHelper.database;
+    return await db.rawInsert(
+        ''' INSERT INTO level(stageId,toUnlock,status,stars,time) VALUES(?,?,?,?,?)''',
+        [
+          level.stageId,
+          level.toUnlock,
+          level.status,
+          level.stars,
+          level.times
+        ]);
+  }
+
+  Future numberOfUnlockLevels(int stageId) async {
+    Database db = await dbHelper.database;
+    return await db.rawQuery(
+        ''' SELECT COUNT(id) AS unlocks FROM level WHERE stageId = ? AND status = ? ''',
+        [stageId, 'Unlock']);
+  }
+
+  Future starsOfLevels(int stageId) async {
+    Database db = await dbHelper.database;
+    return await db.rawQuery(
+        ''' SELECT id,stars FROM level WHERE stageId = ? AND status = ?  ''',
+        [stageId, 'Unlock']);
+  }
+
+  Future toUnlockStars(int stageId) async {
+    Database db = await dbHelper.database;
+    return await db.rawQuery(
+        ''' SELECT id,toUnlock FROM level WHERE stageId = ? AND status = ?  ''',
+        [stageId, 'Locked']);
   }
 }

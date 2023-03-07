@@ -6,7 +6,8 @@ class Level {
   double _time = 0.0;
   String _status = 'Locked';
 
-  Level(this._id, this._toUnlock, this._stageId);
+  Level(this._toUnlock, this._stageId);
+  Level.withStatus(this._toUnlock, this._stageId, this._status);
 
   int get id => _id;
   int get toUnlock => _toUnlock;
