@@ -26,7 +26,7 @@ class DatabaseHelper {
       CREATE TABLE setting
       (
         key STRING PRIMARY KEY ,
-        value STRING
+        value BOOLEAN
       )
       ''');
     await db.execute('''
@@ -69,11 +69,11 @@ class DatabaseHelper {
       ''');
 
     await db.rawInsert(''' 
-      INSERT INTO setting VALUES('vaibration','ON');
+      INSERT INTO setting VALUES('vibration',true);
      ''');
 
     await db.rawInsert('''
-      INSERT INTO setting VALUES('sound','OFF');
+      INSERT INTO setting VALUES('sound',false);
       ''');
   }
 

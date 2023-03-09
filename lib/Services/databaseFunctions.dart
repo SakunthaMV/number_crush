@@ -15,7 +15,7 @@ class DatabaseFunctions {
         .rawQuery(''' SELECT value FROM setting WHERE key = ? ''', [key]);
   }
 
-  Future setSettingStatus(String key, String value) async {
+  Future setSettingStatus(String key, bool value) async {
     Database db = await dbHelper.database;
     return await db.rawUpdate(
         ''' UPDATE setting SET value = ? WHERE key = ?''', [value, key]);
