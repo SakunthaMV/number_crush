@@ -38,4 +38,16 @@ class Question {
     _ans_2 = answers[1];
     _ans_3 = answers[2];
   }
+
+  Question.fromDatabase(Map<String, dynamic> map) {
+    _levelId = map['levelId'];
+    _operand_1 = map['operand_1'];
+    _operator = map['operator'];
+    _operand_2 = map['operand_2'];
+    _ans_1 = map['ans_1'];
+    _ans_2 = map['ans_2'];
+    _ans_3 = map['ans_3'];
+    _correctAns = map['correctAns'];
+    _time = map['time'];
+  }
 }

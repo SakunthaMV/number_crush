@@ -57,15 +57,36 @@ class DatabaseHelper {
       (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         levelId INTEGER,
-        questionNumber INTEGER,
-        question STRING,
+        operand_1 INTEGER,
+        operand_2 INTEGER,
+        operator STRING,
         ans_1 INTEGER,
         ans_2 INTEGER,
         ans_3 INTEGER,
-        ans_4 INTEGER,
         correctAns INTEGER,
+        time DOUBLE,
         FOREIGN KEY (levelId) REFERENCES level (id)
       )
+      ''');
+
+    await db.execute('''
+      CREATE TRIGGER update_star
+      AFTER UPDATE ON level
+      FOR EACH ROW
+      BEGIN
+      UPDATE level SET toUnlock = toUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
+      UPDATE stage SET toUnlock = toUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
+      END
+      ''');
+
+    await db.execute('''
+      CREATE TRIGGER update_status
+      AFTER UPDATE ON level
+      FOR EACH ROW
+      BEGIN
+      UPDATE level SET status = 'Unlocked', toUnlock = 0 WHERE toUnlock <= 0;
+      UPDATE stage SET status = 'Unlocked', toUnlock = 0 WHERE toUnlock <= 0;
+      END
       ''');
 
     await db.rawInsert(''' 

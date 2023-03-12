@@ -4,7 +4,7 @@ class Stage {
   int _stars = 0;
   String _status = 'Locked';
 
-  Stage(this._toUnlock, this._status);
+  Stage(this._toUnlock);
 
   int get id => _id;
   int get toUnlock => _toUnlock;

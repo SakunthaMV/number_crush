@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:number_crush/Models/Question.dart';
 import 'package:sqflite/sqflite.dart';
 import '../Models/Level.dart';
 import '../Models/stage.dart';
@@ -69,6 +70,13 @@ class DatabaseFunctions {
         ]);
   }
 
+  Future updateLevel(int star, int id, double time) async {
+    Database db = await dbHelper.database;
+    return await db.rawUpdate(
+        ''' UPDATE level SET stars = ? , time = ? WHERE id = ? ''',
+        [star, time, id]);
+  }
+
   Future numberOfUnlockLevels(int stageId) async {
     Database db = await dbHelper.database;
     return await db.rawQuery(
@@ -88,5 +96,35 @@ class DatabaseFunctions {
     return await db.rawQuery(
         ''' SELECT id,toUnlock FROM level WHERE stageId = ? AND status = ?  ''',
         [stageId, 'Locked']);
+  }
+
+  //question table function
+  Future storeQuestion(Question question) async {
+    Database db = await dbHelper.database;
+    return await db.rawInsert(''' 
+      INSERT INTO question(levelId,operand_1,operand_2,operator,ans_1,ans_2,ans_3,correctAns,time) VALUES(?,?,?,?,?,?,?,?,?)
+     ''', [
+      question.levelId,
+      question.operand_1,
+      question.operand_2,
+      question.operator,
+      question.ans_1,
+      question.ans_2,
+      question.ans_3,
+      question.correctAns,
+      question.time
+    ]);
+  }
+
+  Future<List<Question>> getQuestions(int levelId) async {
+    List<Question> questionList = [];
+    Database db = await dbHelper.database;
+    List<Map<String, dynamic>> list = await db
+        .rawQuery(''' SELECT * FROM question WHERE levelId = ? ''', [levelId]);
+
+    for (int i = 0; i < list.length; i++) {
+      questionList.add(Question.fromDatabase(list[i]));
+    }
+    return questionList;
   }
 }

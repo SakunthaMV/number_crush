@@ -293,29 +293,26 @@ class Algorithm {
   Question _answerGenerator(Question question) {
     int result = question.correctAns;
     Set<int> answerSet = {};
-    if ('$result'.length < 2) {
+    if (result < 15) {
       while (answerSet.length != 3) {
-        int ans = random.nextInt(10);
+        int ans = random.nextInt(15);
         if (ans == result) {
           continue;
         }
         answerSet.add(ans);
       }
-      List<int> answer = answerSet.toList();
-      question.setAnswer(answer);
     } else {
       while (answerSet.length != 3) {
         int ans =
-            (result - result * 0.15 + random.nextInt((result * 0.3).round()))
-                .round();
+            (result * 0.85 + random.nextInt((result * 0.3).round())).round();
         if (ans == result) {
           continue;
         }
         answerSet.add(ans);
       }
-      List<int> answer = answerSet.toList();
-      question.setAnswer(answer);
     }
+    List<int> answer = answerSet.toList();
+    question.setAnswer(answer);
     return question;
   }
 }
