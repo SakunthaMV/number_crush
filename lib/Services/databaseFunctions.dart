@@ -83,11 +83,16 @@ class DatabaseFunctions {
         ''' UPDATE level SET stars = ? , time = ? WHERE id = ? ''',
         [star, time, id]);
 
-    List<Map<String, dynamic>> result = await db
-        .rawQuery(''' SELECT status,id FROM stage WHERE id = MAX(id) ''');
+    List<Map<String, dynamic>> result = await db.rawQuery(
+        ''' SELECT status,id FROM stage WHERE id = (SELECT MAX(id) FROM stage) ''');
+
+    if (result[0]['status'] == 'Unlocked') {
+      insert(result[0]['id']);
+    }
   }
 
-  void _insert(int stageId) async {
+//insert when stage or level is unlocked
+  void insert(int stageId) async {
     _addStage(_algorithm.stageGenerator(stageId + 1));
     List<Level> levelList = _algorithm.levelGenerator(stageId);
     for (int i = 0; i < 50; i++) {
@@ -96,7 +101,7 @@ class DatabaseFunctions {
   }
 
 //get all levels as a list of objects of levels
-  Future<List<Level>> numberOfUnlockLevels(int stageId) async {
+  Future<List<Level>> getLevels(int stageId) async {
     List<Level> levelList = [];
     Database db = await _dbHelper.database;
     List<Map<String, dynamic>> result = await db.rawQuery(
