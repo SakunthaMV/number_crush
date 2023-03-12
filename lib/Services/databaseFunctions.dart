@@ -1,65 +1,67 @@
-import 'dart:ffi';
-
 import 'package:number_crush/Models/Question.dart';
+import 'package:number_crush/controllers/algorithm.dart';
 import 'package:sqflite/sqflite.dart';
 import '../Models/Level.dart';
 import '../Models/stage.dart';
 import 'DatabaseHelper.dart';
 
 class DatabaseFunctions {
-  DatabaseHelper dbHelper = DatabaseHelper.instance;
+  final Algorithm _algorithm = Algorithm();
+  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
 
-// Setting table function
-  Future getSettingStatus(String key) async {
-    Database db = await dbHelper.database;
-    return await db
+// Setting table function-----------------------------------------------------------------------------------------------
+
+//get status of relevant setting
+  Future<bool> getSettingStatus(String key) async {
+    bool status;
+    Database db = await _dbHelper.database;
+    List<Map<String, dynamic>> result = await db
         .rawQuery(''' SELECT value FROM setting WHERE key = ? ''', [key]);
+    result[0]['value'] == 1 ? status = true : status = false;
+    return status;
   }
 
-  Future setSettingStatus(String key, bool value) async {
-    Database db = await dbHelper.database;
-    return await db.rawUpdate(
+// set status of relevent setting
+  void setSettingStatus(String key, bool value) async {
+    Database db = await _dbHelper.database;
+    await db.rawUpdate(
         ''' UPDATE setting SET value = ? WHERE key = ?''', [value, key]);
   }
 
-// Stage table function
-  Future getNumberOfStages() async {
-    Database db = await dbHelper.database;
-    return await db.rawQuery(''' SELECT COUNT(id) AS stages FROM stage ''');
+// Stage table function ------------------------------------------------------------------------------------------------
+
+//get all stages as list of objects of stage
+  Future<List<Stage>> getStages() async {
+    Database db = await _dbHelper.database;
+    List<Stage> stageList = [];
+    List<Map<String, dynamic>> result =
+        await db.rawQuery(''' SELECT * FROM stage ''');
+    for (int i = 0; i < result.length; i++) {
+      Stage stage = Stage.fromMap(result[i]);
+      stageList.add(stage);
+    }
+    return stageList;
   }
 
-  Future getToUnlockStageStars() async {
-    Database db = await dbHelper.database;
-    return await db.rawQuery(''' SELECT id,toUnlock FROM stage''');
-  }
-
-  Future getAchievedStarsOfStage() async {
-    Database db = await dbHelper.database;
-    return await db.rawQuery(''' SELECT id,stars FROM stage''');
-  }
-
-  Future addStage(Stage stage) async {
-    Database db = await dbHelper.database;
-    return await db.rawInsert(
+//store stage in the database
+  void _addStage(Stage stage) async {
+    Database db = await _dbHelper.database;
+    await db.rawInsert(
         ''' INSERT INTO stage(toUnlock,stars,status) VALUES(?,?,?) ''',
         [stage.toUnlock, stage.stars, stage.status]);
   }
 
   Future getAll(String tableName) async {
-    Database db = await dbHelper.database;
+    Database db = await _dbHelper.database;
     return await db.rawQuery(''' SELECT * FROM ${tableName} ''');
   }
 
-  Future getStageStars(int stageId) async {
-    Database db = await dbHelper.database;
-    return await db
-        .rawQuery(''' SELECT stars FROM stage WHERE id = ? ''', [stageId]);
-  }
+//Level table functions-------------------------------------------------------------------------------------------------
 
-  //Level table functions
-  Future addLevel(Level level) async {
-    Database db = await dbHelper.database;
-    return await db.rawInsert(
+// store levels in the database
+  void _addLevel(Level level) async {
+    Database db = await _dbHelper.database;
+    await db.rawInsert(
         ''' INSERT INTO level(stageId,toUnlock,status,stars,time) VALUES(?,?,?,?,?)''',
         [
           level.stageId,
@@ -70,38 +72,49 @@ class DatabaseFunctions {
         ]);
   }
 
-  Future updateLevel(int star, int id, double time) async {
-    Database db = await dbHelper.database;
-    return await db.rawUpdate(
+// update level details
+  void updateLevel(int star, int id, double time) async {
+    Database db = await _dbHelper.database;
+    await db.rawUpdate(
         ''' UPDATE level SET stars = ? , time = ? WHERE id = ? ''',
         [star, time, id]);
+
+    await db.rawUpdate(
+        ''' UPDATE level SET stars = ? , time = ? WHERE id = ? ''',
+        [star, time, id]);
+
+    List<Map<String, dynamic>> result = await db
+        .rawQuery(''' SELECT status,id FROM stage WHERE id = MAX(id) ''');
   }
 
-  Future numberOfUnlockLevels(int stageId) async {
-    Database db = await dbHelper.database;
-    return await db.rawQuery(
+  void _insert(int stageId) async {
+    _addStage(_algorithm.stageGenerator(stageId + 1));
+    List<Level> levelList = _algorithm.levelGenerator(stageId);
+    for (int i = 0; i < 50; i++) {
+      _addLevel(levelList[i]);
+    }
+  }
+
+//get all levels as a list of objects of levels
+  Future<List<Level>> numberOfUnlockLevels(int stageId) async {
+    List<Level> levelList = [];
+    Database db = await _dbHelper.database;
+    List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT COUNT(id) AS unlocks FROM level WHERE stageId = ? AND status = ? ''',
         [stageId, 'Unlock']);
+    for (int i = 0; i < result.length; i++) {
+      Level level = Level.fromMap(result[i]);
+      levelList.add(level);
+    }
+    return levelList;
   }
 
-  Future starsOfLevels(int stageId) async {
-    Database db = await dbHelper.database;
-    return await db.rawQuery(
-        ''' SELECT id,stars FROM level WHERE stageId = ? AND status = ?  ''',
-        [stageId, 'Unlock']);
-  }
+//question table function-----------------------------------------------------------------------------------------------
 
-  Future toUnlockStars(int stageId) async {
-    Database db = await dbHelper.database;
-    return await db.rawQuery(
-        ''' SELECT id,toUnlock FROM level WHERE stageId = ? AND status = ?  ''',
-        [stageId, 'Locked']);
-  }
-
-  //question table function
-  Future storeQuestion(Question question) async {
-    Database db = await dbHelper.database;
-    return await db.rawInsert(''' 
+//store questions in the database
+  void storeQuestion(Question question) async {
+    Database db = await _dbHelper.database;
+    await db.rawInsert(''' 
       INSERT INTO question(levelId,operand_1,operand_2,operator,ans_1,ans_2,ans_3,correctAns,time) VALUES(?,?,?,?,?,?,?,?,?)
      ''', [
       question.levelId,
@@ -116,9 +129,10 @@ class DatabaseFunctions {
     ]);
   }
 
+// get all question as a list of objects of questions
   Future<List<Question>> getQuestions(int levelId) async {
     List<Question> questionList = [];
-    Database db = await dbHelper.database;
+    Database db = await _dbHelper.database;
     List<Map<String, dynamic>> list = await db
         .rawQuery(''' SELECT * FROM question WHERE levelId = ? ''', [levelId]);
 
