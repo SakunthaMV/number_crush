@@ -6,7 +6,7 @@ import 'package:number_crush/Screens/Widgets/common_background.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 
 class Stages extends StatelessWidget {
-  static String route = 'stages';
+  static const String route = 'stages';
   const Stages({super.key});
 
   @override
