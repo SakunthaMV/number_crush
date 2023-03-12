@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Screens/settings.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
           primary: Colors.white,
           onPrimary: Colors.black,
           error: Colors.red,
-          background: Color(0xFFF1F2EB),
+          background: Color(0xFFF6F7FC),
           onBackground: Color(0xFFC9D6FB),
           outline: Color(0xFF1F3C88),
           outlineVariant: Color(0xFFB3B334),
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
         Settings.route: (context) => const Settings(),
         Stages.route: (context) => const Stages(),
         StageHome.route: (context) => const StageHome(),
+        QuestionScreen.route: (context) => const QuestionScreen(),
       },
     );
   }
