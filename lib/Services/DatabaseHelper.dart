@@ -89,6 +89,10 @@ class DatabaseHelper {
       END
       ''');
 
+    await db.execute(''' CREATE INDEX leveId_index ON question(levelId) ''');
+
+    await db.execute(''' CREATE INDEX stageId_index ON level(stageId) ''');
+
     await db.rawInsert(''' 
       INSERT INTO setting VALUES('vibration',true);
      ''');

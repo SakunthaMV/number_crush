@@ -1,5 +1,4 @@
 class Level {
-  int _id = 0;
   int _toUnlock = 0;
   int _stageId = 0;
   int _stars = 0;
@@ -7,9 +6,8 @@ class Level {
   String _status = 'Locked';
 
   Level(this._toUnlock, this._stageId);
-  Level.withStatus(this._toUnlock, this._stageId, this._status);
+  Level.withStatus(this._stageId, this._status);
 
-  int get id => _id;
   int get toUnlock => _toUnlock;
   int get stars => _stars;
   int get stageId => _stageId;
@@ -26,7 +24,6 @@ class Level {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    map['id'] = _id;
     map['toUnlock'] = _toUnlock;
     map['stars'] = _stars;
     map['stageId'] = _stageId;
@@ -37,7 +34,6 @@ class Level {
   }
 
   Level.fromMap(Map<String, dynamic> map) {
-    _id = map['id'];
     _toUnlock = map['toUnlock'];
     _stars = map['stars'];
     _stageId = map['stageId'];

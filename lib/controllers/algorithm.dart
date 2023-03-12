@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:number_crush/Models/Question.dart';
 
+import '../Models/Level.dart';
+import '../Models/stage.dart';
+
 class Algorithm {
   Random random = Random();
 
@@ -314,5 +317,33 @@ class Algorithm {
     List<int> answer = answerSet.toList();
     question.setAnswer(answer);
     return question;
+  }
+
+  int _startValue(int stageId) {
+    return 100 * (stageId - 1) + 2 * stageId;
+  }
+
+  List<Level> levelGenerator(int stageId) {
+    List<Level> levelList = [];
+    levelList.add(Level.withStatus(stageId, 'Unlocked'));
+
+    for (int i = 0; i < 49; i++) {
+      if (i < 9) {
+        Level level = Level(_startValue(stageId) + i, stageId);
+        levelList.add(level);
+      } else if (i < 39) {
+        Level level = Level(_startValue(stageId) + 2 * (i - 8) + 8, stageId);
+        levelList.add(level);
+      } else {
+        Level level = Level(_startValue(stageId) + 3 * (i - 38) + 68, stageId);
+        levelList.add(level);
+      }
+    }
+    return levelList;
+  }
+
+  Stage stageGenerator(int stageId) {
+    Stage stage = Stage(_startValue(stageId) - 2);
+    return stage;
   }
 }
