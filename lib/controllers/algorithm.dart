@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:number_crush/Models/Question.dart';
+import 'package:number_crush/Services/databaseFunctions.dart';
 
 import '../Models/Level.dart';
 import '../Models/stage.dart';
@@ -323,27 +325,41 @@ class Algorithm {
     return 100 * (stageId - 1) + 2 * stageId;
   }
 
-  List<Level> levelGenerator(int stageId) {
+  Future<List<Level>> levelGenerator(int stageId) async {
     List<Level> levelList = [];
     levelList.add(Level.withStatus(stageId, 'Unlocked'));
-
+    DatabaseFunctions databaseFunctions = DatabaseFunctions();
     for (int i = 0; i < 49; i++) {
       if (i < 9) {
-        Level level = Level(_startValue(stageId) + i, stageId);
+        Level level = Level(
+            _startValue(stageId) + i - await databaseFunctions.getStars(),
+            stageId);
         levelList.add(level);
       } else if (i < 39) {
-        Level level = Level(_startValue(stageId) + 2 * (i - 8) + 8, stageId);
+        Level level = Level(
+            _startValue(stageId) +
+                2 * (i - 8) +
+                8 -
+                await databaseFunctions.getStars(),
+            stageId);
         levelList.add(level);
       } else {
-        Level level = Level(_startValue(stageId) + 3 * (i - 38) + 68, stageId);
+        Level level = Level(
+            _startValue(stageId) +
+                3 * (i - 38) +
+                68 -
+                await databaseFunctions.getStars(),
+            stageId);
         levelList.add(level);
       }
     }
     return levelList;
   }
 
-  Stage stageGenerator(int stageId) {
-    Stage stage = Stage(_startValue(stageId) - 2);
+  Future<Stage> stageGenerator(int stageId) async {
+    DatabaseFunctions databaseFunctions = DatabaseFunctions();
+    Stage stage =
+        Stage(_startValue(stageId) - 2 - await databaseFunctions.getStars());
     return stage;
   }
 }

@@ -35,7 +35,6 @@ class DatabaseHelper {
       CREATE TABLE stage
       (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        toUnlock INTEGER,
         stars INTEGER,
         status STRING,
         forUnlock INTEGER
@@ -47,11 +46,11 @@ class DatabaseHelper {
       (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         stageId INTEGER,
-        toUnlock INTEGER,
         status STRING,
         stars INTEGER,
         time FLOAT,
         forUnlock INTEGER,
+        fullTime INTEGER,
         FOREIGN KEY (stageID) REFERENCES stage (id)
       )
       ''');
@@ -108,7 +107,7 @@ class DatabaseHelper {
     await db.execute(''' CREATE INDEX stageId_index ON level(stageId) ''');
 
     await db.rawInsert('''
-      INSERT INTO stage(toUnlock,stars,status,forUnlock) VALUES(0,0,'Unlocked',0);
+      INSERT INTO stage(stars,status,forUnlock) VALUES(0,'Unlocked',0);
       ''');
 
     await db.rawInsert(''' 
