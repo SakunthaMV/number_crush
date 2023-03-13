@@ -13,7 +13,7 @@ class Stages extends StatelessWidget {
     return CommonBackground(
       content: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: width * 0.05,
+          horizontal: width * 0.075,
           vertical: width * 0.025,
         ),
         child: ListView.builder(
@@ -29,6 +29,7 @@ class Stages extends StatelessWidget {
   Container _stageContainer(BuildContext context, int index, {int stars = 5}) {
     final double width = MediaQuery.of(context).size.width;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final AppBarTheme appBarTheme = Theme.of(context).appBarTheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final bool locked = index == 4;
     return Container(
@@ -36,11 +37,22 @@ class Stages extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: width * 0.02),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(
-            context,
-            StageHome.route,
-            arguments: StageHomeArguments(index + 1, 17),
-          );
+          if (locked) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: appBarTheme.backgroundColor,
+                content: const Center(
+                  child: Text('You Need ${135} Stars to Unlock This Stage'),
+                ),
+              ),
+            );
+          } else {
+            Navigator.pushNamed(
+              context,
+              StageHome.route,
+              arguments: StageHomeArguments(index + 1, 17),
+            );
+          }
         },
         splashColor: Theme.of(context).splashColor,
         highlightColor: Theme.of(context).splashColor,
@@ -63,13 +75,20 @@ class Stages extends StatelessWidget {
                       height: 0.8,
                     ),
                   ),
-                  Text(
-                    '${index + 1}',
-                    style: textTheme.displayMedium!.copyWith(
+                  if (!locked)
+                    Text(
+                      '${index + 1}',
+                      style: textTheme.displayMedium!.copyWith(
+                        color: colorScheme.primary,
+                        height: 0.7,
+                      ),
+                    )
+                  else
+                    Icon(
+                      Icons.lock,
+                      size: 90,
                       color: colorScheme.primary,
-                      height: 0.7,
                     ),
-                  ),
                   if (!locked)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -80,6 +99,7 @@ class Stages extends StatelessWidget {
                           borderSize: 5.0,
                           amount: stars,
                         ),
+                        const SizedBox.shrink(),
                         StarsRow(
                           size: 30,
                           color: colorScheme.outline,
@@ -102,10 +122,7 @@ class Stages extends StatelessWidget {
               if (locked)
                 Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .appBarTheme
-                        .backgroundColor!
-                        .withOpacity(0.6),
+                    color: appBarTheme.backgroundColor!.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
