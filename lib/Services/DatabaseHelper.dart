@@ -1,3 +1,5 @@
+import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/controllers/algorithm.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -76,6 +78,7 @@ class DatabaseHelper {
       BEGIN
       UPDATE level SET toUnlock = toUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
       UPDATE stage SET toUnlock = toUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
+      UPDATE stage set stars = stars + NEW.stars - OLD.stars WHERE id = NEW.stageId ;
       END
       ''');
 
@@ -93,6 +96,10 @@ class DatabaseHelper {
 
     await db.execute(''' CREATE INDEX stageId_index ON level(stageId) ''');
 
+    await db.rawInsert('''
+      INSERT INTO stage(toUnlock,stars,status) VALUES(0,0,'Unlocked');
+      ''');
+
     await db.rawInsert(''' 
       INSERT INTO setting VALUES('vibration',true);
      ''');
@@ -100,26 +107,5 @@ class DatabaseHelper {
     await db.rawInsert('''
       INSERT INTO setting VALUES('sound',false);
       ''');
-  }
-
-  Future<int> insert(Map<String, dynamic> raw, table) async {
-    Database db = await instance.database;
-    return await db.insert(table, raw);
-  }
-
-  Future<List<Map<String, dynamic>>> queryAll(table) async {
-    Database db = await instance.database;
-    return await db.query(table);
-  }
-
-  Future<int> update(Map<String, dynamic> row, table) async {
-    Database db = await instance.database;
-    int id = row["id"];
-    return db.update(table, row, where: 'id = ?', whereArgs: [id]);
-  }
-
-  Future<int> delete(int id, table) async {
-    Database db = await instance.database;
-    return await db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 }
