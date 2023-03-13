@@ -357,9 +357,31 @@ class Algorithm {
   }
 
   Future<Stage> stageGenerator(int stageId) async {
-    DatabaseFunctions databaseFunctions = DatabaseFunctions();
-    Stage stage =
-        Stage(_startValue(stageId) - 2 - await databaseFunctions.getStars());
+    DatabaseFunctions db = DatabaseFunctions();
+    Stage stage = Stage(_startValue(stageId) - 2 - await db.getStars());
     return stage;
+  }
+
+  Future<double> calculateStars(
+      List<bool> result, int level, double usedTime) async {
+    DatabaseFunctions db = DatabaseFunctions();
+    List<Question> questions = await db.getQuestions(level);
+    double givenTime = 0;
+    double correctTime = 0.0;
+    for (int i = 0; i < questions.length; i++) {
+      if (result[i]) {
+        correctTime += questions[i].time;
+      }
+      givenTime += questions[i].time;
+    }
+
+    double value = 0.0;
+    if (givenTime / usedTime > 1) {
+      value = (1 - (usedTime / givenTime)) + (correctTime / givenTime) * 3;
+    } else {
+      value = (givenTime / usedTime) + (correctTime / givenTime) - 0.5;
+    }
+
+    return value;
   }
 }

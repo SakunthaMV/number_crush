@@ -163,4 +163,14 @@ class DatabaseFunctions {
     }
     return questionList;
   }
+
+// is this levelid existed in question
+
+  Future<bool> ifExist(int level) async {
+    Database db = await _dbHelper.database;
+    List<Map<String, dynamic>> result = await db.rawQuery(
+        ''' SELECT COUNT(levelId) AS existing FROM question WHERE levelId = ?  ''',
+        [level]);
+    return result[0]['existing'] > 0 ? true : false;
+  }
 }
