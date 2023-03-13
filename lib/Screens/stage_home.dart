@@ -41,12 +41,22 @@ class StageHome extends StatelessWidget {
               splashColor: Theme.of(context).splashColor,
               onTap: () {
                 if (index + 1 <= unlockedCount) {
-                  Navigator.pushNamed(context, QuestionScreen.route);
+                  Navigator.pushNamed(
+                    context,
+                    QuestionScreen.route,
+                    arguments: QuestionScreenArguments(
+                      args.stage,
+                      (args.stage - 1) * 50 + (index + 1),
+                    ),
+                  );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text('You Need ${8 + 3} Stars to Unlock This Level'),
+                    SnackBar(
+                      backgroundColor: appBarTheme.backgroundColor,
+                      content: const Center(
+                        child:
+                            Text('You Need ${13} Stars to Unlock This Stage'),
+                      ),
                     ),
                   );
                 }
