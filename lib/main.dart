@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
           secondary: Color(0xFF324D94),
           onSecondary: Color(0xFF041D63),
           primaryContainer: Color(0xFFA8BDF4),
+          tertiary: Color(0xFFFFFF00),
         ),
         splashColor: Colors.transparent,
         appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF112049)),
@@ -46,6 +47,8 @@ class MyApp extends StatelessWidget {
           displayLarge: GoogleFonts.robotoMono(
             fontSize: 150.0,
           ),
+          displayMedium: const TextStyle(fontFamily: 'Pony Maker', fontSize: 100),
+          displaySmall: const TextStyle(fontFamily: 'Snack', fontSize: 60),
           headlineLarge: GoogleFonts.ubuntu(
             fontSize: 30.0,
             letterSpacing: 2,
