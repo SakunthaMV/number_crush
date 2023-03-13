@@ -33,8 +33,10 @@ dependencies:
     sdk: flutter
   sqflite : any
   path_provider: any
-  intl: ^0.18.0
+  intl: any
   google_fonts: any
+  percent_indicator: any
+  bouncing_widget: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
