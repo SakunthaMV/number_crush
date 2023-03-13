@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_appbar.dart';
+import 'package:number_crush/Screens/question_screen.dart';
 
 import 'Widgets/Stars/star.dart';
 
 class StageHome extends StatelessWidget {
-  static String route = 'stage-home';
+  static const String route = 'stage-home';
   const StageHome({super.key});
 
   @override
@@ -21,7 +22,12 @@ class StageHome extends StatelessWidget {
         stageNo: args.stage,
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(width * 0.05, width * 0.05, width * 0.05, 0.0),
+        padding: EdgeInsets.fromLTRB(
+          width * 0.05,
+          width * 0.05,
+          width * 0.05,
+          0.0,
+        ),
         child: GridView.count(
           crossAxisCount: 3,
           mainAxisSpacing: width * 0.05,
@@ -30,16 +36,32 @@ class StageHome extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           children: List.generate(50, (index) {
             const int unlockedCount = 7;
-            return Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: appBarTheme.backgroundColor!,
-                  width: 0.7,
+            return InkWell(
+              highlightColor: Theme.of(context).splashColor,
+              splashColor: Theme.of(context).splashColor,
+              onTap: () {
+                if (index + 1 <= unlockedCount) {
+                  Navigator.pushNamed(context, QuestionScreen.route);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('You Need ${8 + 3} Stars to Unlock This Level'),
+                    ),
+                  );
+                }
+              },
+              child: Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: appBarTheme.backgroundColor!,
+                    width: 0.7,
+                  ),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
-                borderRadius: BorderRadius.circular(15.0),
+                child: tileContent(context, index, index + 1 <= unlockedCount),
               ),
-              child: tileContent(context, index, index + 1 <= unlockedCount),
             );
           }),
         ),

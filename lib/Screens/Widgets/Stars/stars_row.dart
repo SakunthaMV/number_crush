@@ -19,19 +19,18 @@ class StarsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: size * 2.9,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Star(
-            size: size,
-            color: color,
-            boderColor: starBoder,
-            borderSize: borderSize,
-          ),
-          Text(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Star(
+          size: size,
+          color: color,
+          boderColor: starBoder,
+          borderSize: borderSize,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Text(
             '$amount',
             style: GoogleFonts.oranienbaum().copyWith(
               fontSize: size,
@@ -39,8 +38,8 @@ class StarsRow extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

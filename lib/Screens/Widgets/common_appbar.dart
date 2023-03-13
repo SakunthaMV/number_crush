@@ -59,7 +59,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         );
         break;
-      case 'question':
+      case 'question_screen':
         buttonRefresh = true;
         title = Text(
           'LEVEL $level',
@@ -87,7 +87,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: backgroundColor,
       elevation: 0.0,
       toolbarHeight: 70,
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: iconBrightness),
+      systemOverlayStyle:
+          SystemUiOverlayStyle(statusBarIconBrightness: iconBrightness),
       automaticallyImplyLeading: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(

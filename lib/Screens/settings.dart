@@ -4,7 +4,7 @@ import 'package:number_crush/Services/databaseFunctions.dart';
 import 'Widgets/common_background.dart';
 
 class Settings extends StatefulWidget {
-  static String route = 'settings';
+  static const String route = 'settings';
   const Settings({super.key});
 
   @override
