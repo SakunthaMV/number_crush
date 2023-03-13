@@ -374,7 +374,7 @@ class Algorithm {
       }
       givenTime += questions[i].time;
     }
-
+    await db.updateLevelfullTime(level, givenTime);
     double value = 0.0;
     if (givenTime / usedTime > 1) {
       value = (1 - (usedTime / givenTime)) + (correctTime / givenTime) * 3;

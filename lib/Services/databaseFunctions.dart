@@ -81,7 +81,7 @@ class DatabaseFunctions {
         ]);
   }
 
-// update level details
+// update level done details
   Future<void> updateLevel(int star, int id, double time) async {
     Database db = await _dbHelper.database;
     await db.rawUpdate(
@@ -124,8 +124,8 @@ class DatabaseFunctions {
     return levelList;
   }
 
-  //
-  Future<void> updateLevelfullTime(int level, int fullTime) async {
+// update given time for this level
+  Future<void> updateLevelfullTime(int level, double fullTime) async {
     Database database = await _dbHelper.database;
     await database.rawUpdate(
         ''' UPDATE level SET fullTime = ? WHERE id = ? ''', [fullTime, level]);

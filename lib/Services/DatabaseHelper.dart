@@ -48,9 +48,9 @@ class DatabaseHelper {
         stageId INTEGER,
         status STRING,
         stars INTEGER,
-        time FLOAT,
+        time DOUBLE,
         forUnlock INTEGER,
-        fullTime INTEGER,
+        fullTime DOUBLE,
         FOREIGN KEY (stageID) REFERENCES stage (id)
       )
       ''');
