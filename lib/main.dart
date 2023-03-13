@@ -23,6 +23,8 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme.light(
           primary: Colors.white,
           onPrimary: Colors.black,
+          primaryContainer: Color(0xFFA8BDF4),
+          onPrimaryContainer: Colors.green,
           error: Colors.red,
           background: Color(0xFFF6F7FC),
           onBackground: Color(0xFFC9D6FB),
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
           outlineVariant: Color(0xFFB3B334),
           secondary: Color(0xFF324D94),
           onSecondary: Color(0xFF041D63),
-          primaryContainer: Color(0xFFA8BDF4),
+          secondaryContainer: Color(0xFF8A2626),
           tertiary: Color(0xFFFFFF00),
         ),
         splashColor: Colors.transparent,
@@ -47,7 +49,8 @@ class MyApp extends StatelessWidget {
           displayLarge: GoogleFonts.robotoMono(
             fontSize: 150.0,
           ),
-          displayMedium: const TextStyle(fontFamily: 'Pony Maker', fontSize: 100),
+          displayMedium:
+              const TextStyle(fontFamily: 'Pony Maker', fontSize: 100),
           displaySmall: const TextStyle(fontFamily: 'Snack', fontSize: 60),
           headlineLarge: GoogleFonts.ubuntu(
             fontSize: 30.0,
