@@ -134,7 +134,7 @@ class DatabaseFunctions {
 //question table function-----------------------------------------------------------------------------------------------
 
 //store questions in the database
-  void storeQuestion(Question question) async {
+  Future<void> storeQuestion(Question question) async {
     Database db = await _dbHelper.database;
     await db.rawInsert(''' 
       INSERT INTO question(levelId,operand_1,operand_2,operator,ans_1,ans_2,ans_3,correctAns,time) VALUES(?,?,?,?,?,?,?,?,?)
