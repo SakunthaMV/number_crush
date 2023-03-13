@@ -37,7 +37,8 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         toUnlock INTEGER,
         stars INTEGER,
-        status STRING
+        status STRING,
+        forUnlock INTEGER
       )
       ''');
 
@@ -50,6 +51,7 @@ class DatabaseHelper {
         status STRING,
         stars INTEGER,
         time FLOAT,
+        forUnlock INTEGER,
         FOREIGN KEY (stageID) REFERENCES stage (id)
       )
       ''');
@@ -76,19 +78,28 @@ class DatabaseHelper {
       AFTER UPDATE ON level
       FOR EACH ROW
       BEGIN
-      UPDATE level SET toUnlock = toUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
-      UPDATE stage SET toUnlock = toUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
-      UPDATE stage set stars = stars + NEW.stars - OLD.stars WHERE id = NEW.stageId ;
+      UPDATE level SET forUnlock = forUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
+      UPDATE stage SET forUnlock = forUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
+      UPDATE stage SET stars = stars + NEW.stars - OLD.stars WHERE id = NEW.stageId ;
       END
       ''');
 
     await db.execute('''
-      CREATE TRIGGER update_status
+      CREATE TRIGGER update_status_stage
       AFTER UPDATE ON level
       FOR EACH ROW
       BEGIN
-      UPDATE level SET status = 'Unlocked', toUnlock = 0 WHERE toUnlock <= 0;
-      UPDATE stage SET status = 'Unlocked', toUnlock = 0 WHERE toUnlock <= 0;
+      UPDATE stage SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0;
+      UPDATE level SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0;
+      END
+      ''');
+
+    await db.execute('''
+      CREATE TRIGGER update_status_level
+      AFTER UPDATE ON level
+      FOR EACH ROW
+      BEGIN
+      UPDATE level SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0;
       END
       ''');
 
@@ -97,7 +108,7 @@ class DatabaseHelper {
     await db.execute(''' CREATE INDEX stageId_index ON level(stageId) ''');
 
     await db.rawInsert('''
-      INSERT INTO stage(toUnlock,stars,status) VALUES(0,0,'Unlocked');
+      INSERT INTO stage(toUnlock,stars,status,forUnlock) VALUES(0,0,'Unlocked',0);
       ''');
 
     await db.rawInsert(''' 
