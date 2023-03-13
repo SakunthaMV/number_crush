@@ -32,11 +32,11 @@ class StarsRow extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10.0),
           child: Text(
             '$amount',
-            style: GoogleFonts.oranienbaum().copyWith(
-              fontSize: size,
-              letterSpacing: 2.0,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                  fontSize: size,
+                  letterSpacing: -1,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
           ),
         ),
       ],
