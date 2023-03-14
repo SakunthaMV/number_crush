@@ -1,5 +1,3 @@
-import 'package:number_crush/Services/databaseFunctions.dart';
-import 'package:number_crush/controllers/algorithm.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -51,6 +49,7 @@ class DatabaseHelper {
         time DOUBLE,
         forUnlock INTEGER,
         fullTime DOUBLE,
+        doubleStar DOUBLE,
         FOREIGN KEY (stageID) REFERENCES stage (id)
       )
       ''');

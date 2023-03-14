@@ -64,32 +64,36 @@ class DatabaseFunctions {
     return stars[0]['stars'];
   }
 
+// stars and time
+
 //Level table functions-------------------------------------------------------------------------------------------------
 
 // store levels in the database
   void _addLevel(Level level) async {
     Database db = await _dbHelper.database;
     await db.rawInsert(
-        ''' INSERT INTO level(stageId,status,stars,time,forUnlock,fullTime) VALUES(?,?,?,?,?,?)''',
+        ''' INSERT INTO level(stageId,status,stars,time,forUnlock,fullTime,doubleStar) VALUES(?,?,?,?,?,?)''',
         [
           level.stageId,
           level.status,
           level.stars,
           level.times,
           level.forUnlock,
-          level.fullTIme
+          level.fullTIme,
+          level.doubleStar
         ]);
   }
 
 // update level done details
-  Future<void> updateLevel(int star, int id, double time) async {
+  Future<void> updateLevel(
+      int star, int id, double time, double doubeStar) async {
     Database db = await _dbHelper.database;
     await db.rawUpdate(
-        ''' UPDATE level SET stars = ? , time = ? WHERE id = ? ''',
+        ''' UPDATE level SET stars = ? , time = ?, doubleStar = ? WHERE id = ? ''',
         [star, time, id]);
 
     await db.rawUpdate(
-        ''' UPDATE level SET stars = ? , time = ? WHERE id = ? ''',
+        ''' UPDATE level SET stars = ? , time = ?, doubleStar = ? WHERE id = ? ''',
         [star, time, id]);
 
     List<Map<String, dynamic>> result = await db.rawQuery(
