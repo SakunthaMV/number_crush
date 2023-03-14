@@ -80,7 +80,7 @@ class Algorithm {
     switch (type) {
       case 0:
         {
-          int t = 1 + size_1 * size_2 * 1;
+          int t = 3 + size_1 * size_2 * 1;
           return t / scale;
         }
       case 1:
@@ -377,7 +377,7 @@ class Algorithm {
     if (givenTime / usedTime > 1) {
       value = (1 - (usedTime / givenTime)) + (correctTime / givenTime) * 3;
     } else {
-      value = (givenTime / usedTime) + (correctTime / givenTime) - 0.5;
+      value = (givenTime / usedTime) + (correctTime / givenTime);
     }
 
     return value;
