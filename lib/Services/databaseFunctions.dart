@@ -184,4 +184,11 @@ class DatabaseFunctions {
         [level]);
     return result[0]['existing'] > 0 ? true : false;
   }
+
+  Future<bool> isExistDataBase(int level) async {
+    Database db = await _dbHelper.database;
+    List<Map<String, dynamic>> result = await db.rawQuery(
+        ''' SELECT COUNT(id) AS existing FROM level WHERE id = ?  ''', [level]);
+    return result[0]['existing'] > 0 ? true : false;
+  }
 }
