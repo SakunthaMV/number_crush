@@ -148,7 +148,7 @@ class DatabaseFunctions {
     List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT COUNT(id) AS id FROM level WHERE id = ? AND status = ? ''',
         [level, 'Unlocked']);
-    return result[0]['id'] < 1 ? true : false;
+    return result[0]['id'] < 1 ? false : true;
   }
 
 //question table function-----------------------------------------------------------------------------------------------
