@@ -24,17 +24,6 @@ class Level {
     _time = newTime;
   }
 
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
-    map['forUnlock'] = _forUnlock;
-    map['stars'] = _stars;
-    map['stageId'] = _stageId;
-    map['time'] = _time;
-    map['status'] = _status;
-
-    return map;
-  }
-
   Level.fromMap(Map<String, dynamic> map) {
     _forUnlock = map['forUnlock'];
     _stars = map['stars'];

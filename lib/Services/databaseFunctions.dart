@@ -114,9 +114,8 @@ class DatabaseFunctions {
   Future<List<Level>> getLevels(int stageId) async {
     List<Level> levelList = [];
     Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result = await db.rawQuery(
-        ''' SELECT COUNT(id) AS unlocks FROM level WHERE stageId = ? AND status = ? ''',
-        [stageId, 'Unlock']);
+    List<Map<String, dynamic>> result = await db
+        .rawQuery(''' SELECT * FROM level WHERE stageId = ? ''', [stageId]);
     for (int i = 0; i < result.length; i++) {
       Level level = Level.fromMap(result[i]);
       levelList.add(level);
