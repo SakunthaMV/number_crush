@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
-import 'package:number_crush/Screens/settings.dart';
+import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
 
+import '../settings.dart';
+
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final int? stageNo;
-  final int? level;
+  final int stageNo;
+  final int level;
   const CommonAppBar({super.key, this.stageNo = 5, this.level = 23});
+
+  Future<int> _stars() async {
+    DatabaseFunctions db = DatabaseFunctions();
+    return await db.getStars();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +52,18 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
             SizedBox(
               width: width * 0.05,
             ),
-            StarsRow(
-              starBoder: colorScheme.outlineVariant,
-              amount: 12,
-              borderSize: 5.0,
+            FutureBuilder(
+              future: _stars(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox.shrink();
+                }
+                return StarsRow(
+                  starBoder: colorScheme.outlineVariant,
+                  amount: snapshot.data!,
+                  borderSize: 5.0,
+                );
+              },
             ),
           ],
         );
@@ -65,10 +80,18 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
             SizedBox(
               width: width * 0.05,
             ),
-            StarsRow(
-              starBoder: colorScheme.outlineVariant,
-              amount: 12,
-              borderSize: 5.0,
+            FutureBuilder(
+              future: _stars(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox.shrink();
+                }
+                return StarsRow(
+                  starBoder: colorScheme.outlineVariant,
+                  amount: snapshot.data!,
+                  borderSize: 5.0,
+                );
+              },
             ),
           ],
         );
@@ -82,7 +105,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         break;
       case 'reward':
         buttonHome = true;
-        buttonRefresh = true;
         buttonRefresh = true;
         title = Text(
           'LEVEL $level',
@@ -130,10 +152,15 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           } else if (icon == Icons.home) {
             Navigator.popUntil(context, (route) => route.isFirst);
           } else {
-            DatabaseFunctions db = DatabaseFunctions();
-            var c = await db.getAll('level');
-            print(c[0]);
+            Navigator.pushReplacementNamed(
+              context,
+              QuestionScreen.route,
+              arguments: QuestionScreenArguments(stageNo, level),
+            );
           }
+          // DatabaseFunctions db = DatabaseFunctions();
+          // var c = await db.getAll('level');
+          // print(c[0]);
         },
         child: Icon(
           icon,
