@@ -4,18 +4,40 @@ import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Future<int> _currnetLevel() async {
     DatabaseFunctions db = DatabaseFunctions();
     return await db.lastUnlockLevel();
   }
 
+  late Animation<double> _animation;
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
+    _animation = Tween(begin: 2.0, end: 15.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeIn,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    const String backgroundStyle = 'Classic';
     return CommonBackground(
       content: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.1),
@@ -41,12 +63,6 @@ class Home extends StatelessWidget {
                   'STAGES',
                   'Currunt Level: $level',
                 ),
-                homeRow(
-                  context,
-                  Icons.wallpaper,
-                  'BACKGROUNDS',
-                  'Currunt: $backgroundStyle',
-                )
               ],
             );
           },
@@ -67,22 +83,55 @@ class Home extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
         children: [
-          SizedBox(
-            width: width * 0.2,
-            height: width * 0.2,
-            child: ElevatedButton(
-              onPressed: () {
-                _commonPress(context, topic);
+          if (topic == 'PLAY')
+            AnimatedBuilder(
+              animation: _animation,
+              builder: (context, _) {
+                return Container(
+                  width: width * 0.2,
+                  height: width * 0.2,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: _animation.value,
+                        spreadRadius: _animation.value,
+                        color: colorScheme.secondary.withOpacity(0.25),
+                      )
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _commonPress(context, topic);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorScheme.secondary,
+                    ),
+                    child: Icon(
+                      icon,
+                      size: 40,
+                    ),
+                  ),
+                );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colorScheme.secondary,
-              ),
-              child: Icon(
-                icon,
-                size: 40,
+            )
+          else
+            SizedBox(
+              width: width * 0.2,
+              height: width * 0.2,
+              child: ElevatedButton(
+                onPressed: () {
+                  _commonPress(context, topic);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorScheme.secondary,
+                ),
+                child: Icon(
+                  icon,
+                  size: 40,
+                ),
               ),
             ),
-          ),
           Padding(
             padding: EdgeInsets.only(left: width * 0.05),
             child: InkWell(
