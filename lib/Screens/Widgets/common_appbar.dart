@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/settings.dart';
+import 'package:number_crush/Services/databaseFunctions.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int? stageNo;
@@ -123,11 +124,15 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       height: 45,
       margin: const EdgeInsets.only(right: 15.0),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if (icon == Icons.settings) {
             Navigator.pushNamed(context, Settings.route);
           } else if (icon == Icons.home) {
             Navigator.popUntil(context, (route) => route.isFirst);
+          } else {
+            DatabaseFunctions db = DatabaseFunctions();
+            var c = await db.getAll('level');
+            print(c[0]);
           }
         },
         child: Icon(

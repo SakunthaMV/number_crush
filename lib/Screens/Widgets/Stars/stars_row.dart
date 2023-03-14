@@ -8,6 +8,7 @@ class StarsRow extends StatelessWidget {
   final double size;
   final double borderSize;
   final Color? starBoder;
+  final Color? textColor;
   const StarsRow({
     super.key,
     this.amount = 0,
@@ -15,6 +16,7 @@ class StarsRow extends StatelessWidget {
     this.size = 20.0,
     this.borderSize = 10.0,
     this.starBoder,
+    this.textColor,
   });
 
   @override
@@ -35,7 +37,7 @@ class StarsRow extends StatelessWidget {
             style: Theme.of(context).textTheme.displayLarge!.copyWith(
                   fontSize: size,
                   letterSpacing: -1,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: textColor ?? Theme.of(context).colorScheme.primary,
                 ),
           ),
         ),

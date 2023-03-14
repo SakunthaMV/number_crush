@@ -13,11 +13,11 @@ class Stages extends StatelessWidget {
     return CommonBackground(
       content: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: width * 0.075,
+          horizontal: width * 0.1,
           vertical: width * 0.025,
         ),
         child: ListView.builder(
-          itemCount: 5,
+          itemCount: 50,
           itemBuilder: (context, index) {
             return _stageContainer(context, index);
           },
@@ -34,7 +34,7 @@ class Stages extends StatelessWidget {
     final bool locked = index == 4;
     return Container(
       height: 250,
-      margin: EdgeInsets.symmetric(vertical: width * 0.02),
+      margin: EdgeInsets.symmetric(vertical: width * 0.03),
       child: InkWell(
         onTap: () {
           if (locked) {
@@ -60,7 +60,7 @@ class Stages extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          color: colorScheme.outline,
+          color: colorScheme.onSecondaryContainer,
           elevation: 5,
           child: Stack(
             alignment: Alignment.center,
@@ -126,6 +126,63 @@ class Stages extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Opacity(
+                    opacity: 0.0,
+                    child: Text(
+                      'STAGE',
+                      style: textTheme.displaySmall!.copyWith(
+                        color: colorScheme.primary,
+                        height: 0.8,
+                      ),
+                    ),
+                  ),
+                  if (!locked)
+                    Text(
+                      '${index + 1}',
+                      style: textTheme.displayMedium!.copyWith(
+                        color: colorScheme.primary,
+                        height: 0.7,
+                      ),
+                    )
+                  else
+                    Icon(
+                      Icons.lock,
+                      size: 90,
+                      color: colorScheme.primary,
+                    ),
+                  if (!locked)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        StarsRow(
+                          size: 30,
+                          starBoder: colorScheme.tertiary,
+                          borderSize: 5.0,
+                          amount: stars,
+                        ),
+                        const SizedBox.shrink(),
+                        StarsRow(
+                          size: 30,
+                          color: colorScheme.outline,
+                          starBoder: colorScheme.primary,
+                          borderSize: 5.0,
+                          amount: 150 - stars,
+                        ),
+                      ],
+                    )
+                  else
+                    StarsRow(
+                      size: 30,
+                      color: colorScheme.outline,
+                      starBoder: colorScheme.tertiary,
+                      borderSize: 5.0,
+                      amount: 135,
+                    ),
+                ],
+              ),
             ],
           ),
         ),

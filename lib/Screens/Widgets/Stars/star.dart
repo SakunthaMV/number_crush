@@ -15,6 +15,7 @@ class Star extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Transform.scale(
       scale: (1.0 / 25.0) * size,
       child: Stack(
@@ -24,6 +25,13 @@ class Star extends StatelessWidget {
             Icons.star,
             size: 25.0 + borderSize,
             color: boderColor ?? Theme.of(context).colorScheme.outline,
+            shadows: [
+              Shadow(
+                blurRadius: 15,
+                offset: const Offset(0, 2),
+                color: colorScheme.onPrimary.withOpacity(0.15),
+              )
+            ],
           ),
           Icon(
             Icons.star,
