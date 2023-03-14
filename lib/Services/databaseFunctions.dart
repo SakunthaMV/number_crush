@@ -72,7 +72,7 @@ class DatabaseFunctions {
   void _addLevel(Level level) async {
     Database db = await _dbHelper.database;
     await db.rawInsert(
-        ''' INSERT INTO level(stageId,status,stars,time,forUnlock,fullTime,doubleStar) VALUES(?,?,?,?,?,?)''',
+        ''' INSERT INTO level(stageId,status,stars,time,forUnlock,fullTime,doubleStar) VALUES(?,?,?,?,?,?,?)''',
         [
           level.stageId,
           level.status,
@@ -90,11 +90,11 @@ class DatabaseFunctions {
     Database db = await _dbHelper.database;
     await db.rawUpdate(
         ''' UPDATE level SET stars = ? , time = ?, doubleStar = ? WHERE id = ? ''',
-        [star, time, id]);
+        [star, time, doubeStar, id]);
 
     await db.rawUpdate(
         ''' UPDATE level SET stars = ? , time = ?, doubleStar = ? WHERE id = ? ''',
-        [star, time, id]);
+        [star, time, doubeStar, id]);
 
     List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT status,id FROM stage WHERE id = (SELECT MAX(id) FROM stage) ''');
