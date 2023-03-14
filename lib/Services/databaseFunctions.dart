@@ -134,6 +134,14 @@ class DatabaseFunctions {
         ''' UPDATE level SET fullTime = ? WHERE id = ? ''', [fullTime, level]);
   }
 
+// get float number of stars and
+  Future<double> getDoubleStar(int level) async {
+    Database db = await _dbHelper.database;
+    List<Map<String, dynamic>> result = await db
+        .rawQuery(''' SELECT doubleStar FROM level WHERE id = ? ''', [level]);
+    return result[0]['doubleStar'];
+  }
+
 //question table function-----------------------------------------------------------------------------------------------
 
 //store questions in the database
