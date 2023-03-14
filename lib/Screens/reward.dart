@@ -9,6 +9,7 @@ import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
+import '../controllers/audio_controller.dart';
 import 'Widgets/Stars/star.dart';
 
 class Reward extends StatefulWidget {
@@ -76,6 +77,7 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
     _firstStarController.dispose();
     _secondStarController.dispose();
     _thirdStarController.dispose();
+    _finalAnimationController.dispose();
   }
 
   @override
@@ -342,6 +344,7 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
             onPressed: () async {
               DatabaseFunctions db = DatabaseFunctions();
               final bool unlocked = await db.isUnlock(widget.args.level + 1);
+              await AudioController().play('Normal_Buttons.mp3');
               if (unlocked) {
                 if (widget.args.level % 50 != 0) {
                   // ignore: use_build_context_synchronously

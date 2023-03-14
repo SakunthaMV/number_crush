@@ -5,11 +5,17 @@ import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
 
 import '../Models/stage.dart';
+import '../controllers/audio_controller.dart';
 
-class Stages extends StatelessWidget {
+class Stages extends StatefulWidget {
   static const String route = 'stages';
   const Stages({super.key});
 
+  @override
+  State<Stages> createState() => _StagesState();
+}
+
+class _StagesState extends State<Stages> {
   Future<List<Stage>> _details() async {
     DatabaseFunctions db = DatabaseFunctions();
     return await db.getStages();
@@ -57,7 +63,7 @@ class Stages extends StatelessWidget {
       height: 250,
       margin: EdgeInsets.symmetric(vertical: width * 0.03),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           if (locked) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -69,11 +75,15 @@ class Stages extends StatelessWidget {
               ),
             );
           } else {
+            await AudioController().play('Normal_Buttons.mp3');
+            // ignore: use_build_context_synchronously
             Navigator.pushNamed(
               context,
               StageHome.route,
               arguments: StageHomeArguments(index + 1),
-            );
+            ).then((value) {
+              setState(() {});
+            });
           }
         },
         splashColor: Theme.of(context).splashColor,

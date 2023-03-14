@@ -3,6 +3,7 @@ import 'package:number_crush/Screens/Widgets/common_background.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/controllers/audio_controller.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -166,11 +167,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void _commonPress(BuildContext context, String topic) async {
     if (topic == 'STAGES') {
-      Navigator.pushNamed(context, Stages.route);
+      Navigator.pushNamed(context, Stages.route).then((value) {
+        setState(() {});
+      });
+      await AudioController().play('Normal_Buttons.mp3');
     } else if (topic == 'PLAY') {
       DatabaseFunctions db = DatabaseFunctions();
       final int curruntLevel = await db.lastUnlockLevel();
       final int stage = (curruntLevel / 50).ceil();
+      await AudioController().play('Play_Button.mp3');
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(
         context,
@@ -179,7 +184,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           stage,
           curruntLevel: curruntLevel % 50,
         ),
-      );
+      ).then((value) {
+        setState(() {});
+      });
     }
   }
 }

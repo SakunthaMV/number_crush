@@ -5,6 +5,7 @@ import 'package:number_crush/Screens/Widgets/common_appbar.dart';
 import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
 
+import '../controllers/audio_controller.dart';
 import 'Widgets/Stars/star.dart';
 
 class StageHome extends StatefulWidget {
@@ -113,8 +114,10 @@ class _StageHomeState extends State<StageHome> {
                     return InkWell(
                       highlightColor: Theme.of(context).splashColor,
                       splashColor: Theme.of(context).splashColor,
-                      onTap: () {
+                      onTap: () async {
                         if (details[index].status == 'Unlocked') {
+                          await AudioController().play('Normal_Buttons.mp3');
+                          // ignore: use_build_context_synchronously
                           Navigator.pushNamed(
                             context,
                             QuestionScreen.route,

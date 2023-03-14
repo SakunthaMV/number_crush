@@ -8,6 +8,7 @@ import 'package:number_crush/Services/databaseFunctions.dart';
 import 'package:number_crush/controllers/algorithm.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
+import '../controllers/audio_controller.dart';
 import 'Widgets/common_appbar.dart';
 
 class QuestionScreen extends StatefulWidget {
@@ -291,6 +292,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
       margin: EdgeInsets.all(width * 0.025),
       child: BouncingWidget(
         onPressed: () async {
+          await AudioController().play('Answer_Buttons.mp3');
           if (answer == _questions[_currentIndex].correctAns) {
             _questionStatus[_currentIndex] = true;
           } else {
