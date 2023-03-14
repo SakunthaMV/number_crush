@@ -76,7 +76,7 @@ class Algorithm {
   }
 
   double _timeForQuesion(int type, int size_1, int size_2) {
-    double scale = 1.9;
+    double scale = 1.2;
     switch (type) {
       case 0:
         {
