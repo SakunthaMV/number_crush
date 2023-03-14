@@ -1,13 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:number_crush/Models/Level.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_appbar.dart';
 import 'package:number_crush/Screens/question_screen.dart';
+import 'package:number_crush/Services/databaseFunctions.dart';
 
 import 'Widgets/Stars/star.dart';
 
-class StageHome extends StatelessWidget {
+class StageHome extends StatefulWidget {
   static const String route = 'stage-home';
-  const StageHome({super.key});
+  final StageHomeArguments args;
+  const StageHome(this.args, {super.key});
+
+  @override
+  State<StageHome> createState() => _StageHomeState();
+}
+
+class _StageHomeState extends State<StageHome> {
+  final ScrollController _controller = ScrollController();
+  Future<List<Level>> _levelDetails(int stage) async {
+    DatabaseFunctions db = DatabaseFunctions();
+    return await db.getLevels(stage);
+  }
+
+  Future<int> _stars() async {
+    DatabaseFunctions db = DatabaseFunctions();
+    return await db.getStars();
+  }
+
+  void _toItem(int item) {
+    final int pos = ((item - 1) / 3).floor();
+    final double height =
+        _controller.position.maxScrollExtent + context.size!.height - 95.0;
+    final double value = (pos / 17) * height;
+    final double newValue = value > _controller.position.maxScrollExtent
+        ? _controller.position.maxScrollExtent
+        : value;
+    _controller.animateTo(
+      newValue,
+      duration: const Duration(seconds: 1),
+      curve: Curves.decelerate,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.args.curruntLevel != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_controller.hasClients) {
+          _toItem(widget.args.curruntLevel!);
+        } else {
+          Future.delayed(const Duration(milliseconds: 400)).then((value) {
+            _toItem(widget.args.curruntLevel!);
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,71 +71,102 @@ class StageHome extends StatelessWidget {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final AppBarTheme appBarTheme = Theme.of(context).appBarTheme;
     final double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: colorScheme.background,
-      appBar: CommonAppBar(
-        stageNo: args.stage,
-      ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(
-          width * 0.05,
-          width * 0.05,
-          width * 0.05,
-          0.0,
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      backgroundColor: colorScheme.primary,
+      color: colorScheme.secondary,
+      displacement: 100.0,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        backgroundColor: colorScheme.background,
+        appBar: CommonAppBar(
+          stageNo: args.stage,
         ),
-        child: GridView.count(
-          crossAxisCount: 3,
-          mainAxisSpacing: width * 0.05,
-          crossAxisSpacing: width * 0.05,
-          childAspectRatio: 0.75,
-          physics: const BouncingScrollPhysics(),
-          children: List.generate(50, (index) {
-            const int unlockedCount = 7;
-            return InkWell(
-              highlightColor: Theme.of(context).splashColor,
-              splashColor: Theme.of(context).splashColor,
-              onTap: () {
-                if (index + 1 <= unlockedCount) {
-                  Navigator.pushNamed(
-                    context,
-                    QuestionScreen.route,
-                    arguments: QuestionScreenArguments(
-                      args.stage,
-                      (args.stage - 1) * 50 + (index + 1),
-                    ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: appBarTheme.backgroundColor,
-                      content: const Center(
-                        child:
-                            Text('You Need ${13} Stars to Unlock This Stage'),
-                      ),
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(
+            width * 0.05,
+            width * 0.05,
+            width * 0.05,
+            0.0,
+          ),
+          child: FutureBuilder(
+              future: _levelDetails(args.stage),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: colorScheme.onPrimary,
                     ),
                   );
                 }
-              },
-              child: Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    color: appBarTheme.backgroundColor!,
-                    width: 0.7,
-                  ),
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: tileContent(context, index, index + 1 <= unlockedCount),
-              ),
-            );
-          }),
+                final List<Level> details = snapshot.data!;
+                return GridView.count(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: width * 0.05,
+                  crossAxisSpacing: width * 0.05,
+                  childAspectRatio: 0.75,
+                  physics: const BouncingScrollPhysics(),
+                  controller: _controller,
+                  children: List.generate(50, (index) {
+                    return InkWell(
+                      highlightColor: Theme.of(context).splashColor,
+                      splashColor: Theme.of(context).splashColor,
+                      onTap: () {
+                        if (details[index].status == 'Unlocked') {
+                          Navigator.pushNamed(
+                            context,
+                            QuestionScreen.route,
+                            arguments: QuestionScreenArguments(
+                              args.stage,
+                              (args.stage - 1) * 50 + (index + 1),
+                            ),
+                          ).then((value) {
+                            setState(() {});
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: appBarTheme.backgroundColor,
+                              content: Center(
+                                child: Text(
+                                    'You Need ${details[index].forUnlock} Stars to Unlock This Stage'),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: appBarTheme.backgroundColor!,
+                            width: 0.7,
+                          ),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: tileContent(
+                            context,
+                            index,
+                            details[index].status == 'Unlocked',
+                            details[index]),
+                      ),
+                    );
+                  }),
+                );
+              }),
         ),
       ),
     );
   }
 
-  Widget tileContent(BuildContext context, int index, bool unlocked) {
+  Widget tileContent(
+    BuildContext context,
+    int index,
+    bool unlocked,
+    Level level,
+  ) {
     var args = ModalRoute.of(context)?.settings.arguments as StageHomeArguments;
     final double width = MediaQuery.of(context).size.width;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -102,7 +189,9 @@ class StageHome extends StatelessWidget {
                         size: 20,
                         borderSize: 5.0,
                         boderColor: colorScheme.outlineVariant,
-                        // color: colorScheme.primary,
+                        color: level.stars >= 1
+                            ? colorScheme.tertiary
+                            : colorScheme.primary,
                       ),
                     ),
                     Padding(
@@ -111,7 +200,9 @@ class StageHome extends StatelessWidget {
                         size: 30,
                         borderSize: 5.0,
                         boderColor: colorScheme.outlineVariant,
-                        // color: colorScheme.primary,
+                        color: level.stars >= 2
+                            ? colorScheme.tertiary
+                            : colorScheme.primary,
                       ),
                     ),
                     Padding(
@@ -120,7 +211,9 @@ class StageHome extends StatelessWidget {
                         size: 20,
                         borderSize: 5.0,
                         boderColor: colorScheme.outlineVariant,
-                        color: colorScheme.primary,
+                        color: level.stars >= 3
+                            ? colorScheme.tertiary
+                            : colorScheme.primary,
                       ),
                     ),
                   ],
@@ -136,11 +229,19 @@ class StageHome extends StatelessWidget {
                       topRight: Radius.circular(15.0),
                     ),
                   ),
-                  child: const Center(
-                    child: StarsRow(
-                      amount: 18,
-                      size: 20,
-                      starBoder: Colors.transparent,
+                  child: Center(
+                    child: FutureBuilder(
+                      future: _stars(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const SizedBox.shrink();
+                        }
+                        return StarsRow(
+                          amount: level.forUnlock + snapshot.data!,
+                          size: 20,
+                          starBoder: Colors.transparent,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -167,30 +268,50 @@ class StageHome extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: width * 0.02,
+                horizontal: width * 0.015,
                 vertical: 5.0,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (unlocked)
-                    const Icon(
-                      Icons.lock_open,
-                      size: 18,
-                    )
+                    if (level.times < 0.1)
+                      const Icon(
+                        Icons.lock_open,
+                        size: 18,
+                      )
+                    else
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 2.0),
+                            child: Icon(
+                              Icons.timer_sharp,
+                              size: 15,
+                              color: colorScheme.onPrimary.withOpacity(0.2),
+                            ),
+                          ),
+                          FittedBox(
+                            child: Text(
+                              level.times.toStringAsFixed(1),
+                              style: textTheme.labelMedium,
+                            ),
+                          ),
+                        ],
+                      )
                   else
                     const SizedBox.shrink(),
                   RichText(
                     text: TextSpan(
                       style: textTheme.labelMedium,
-                      children: const [
+                      children: [
                         TextSpan(
-                          text: '0',
-                          style: TextStyle(
+                          text: '${level.stars}',
+                          style: const TextStyle(
                             fontSize: 17,
                           ),
                         ),
-                        TextSpan(text: '/3'),
+                        const TextSpan(text: '/3'),
                       ],
                     ),
                   ),
@@ -227,6 +348,6 @@ class StageHome extends StatelessWidget {
 
 class StageHomeArguments {
   final int stage;
-  final int ongoingProblem;
-  StageHomeArguments(this.stage, this.ongoingProblem);
+  final int? curruntLevel;
+  StageHomeArguments(this.stage, {this.curruntLevel});
 }
