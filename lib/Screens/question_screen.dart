@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:number_crush/Models/Question.dart';
 import 'package:number_crush/Screens/reward.dart';
+import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
 import 'package:number_crush/controllers/algorithm.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -63,137 +64,146 @@ class _QuestionScreenState extends State<QuestionScreen> {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final double width = MediaQuery.of(context).size.width;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      appBar: CommonAppBar(
-        stageNo: widget.args.stage,
-        level: widget.args.level,
-      ),
-      backgroundColor: colorScheme.background,
-      body: FutureBuilder(
-        future: _generatedQuestion(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: SizedBox(
-                height: 100,
-                width: 100,
-                child: CircularProgressIndicator(
-                  color: colorScheme.onBackground,
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.popUntil(
+          context,
+          ModalRoute.withName(StageHome.route),
+        );
+        return Future.value(true);
+      },
+      child: Scaffold(
+        appBar: CommonAppBar(
+          stageNo: widget.args.stage,
+          level: widget.args.level,
+        ),
+        backgroundColor: colorScheme.background,
+        body: FutureBuilder(
+          future: _generatedQuestion(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: CircularProgressIndicator(
+                    color: colorScheme.onBackground,
+                  ),
                 ),
-              ),
-            );
-          }
-          _questions = snapshot.data!;
-          return Column(
-            children: [
-              TweenAnimationBuilder(
-                duration: Duration(milliseconds: (_totalTime * 1000).toInt()),
-                tween: Tween(begin: 1.0, end: 0.0),
-                builder: (context, time, _) {
-                  return LinearPercentIndicator(
-                    percent: time,
-                    lineHeight: 20.0,
-                    barRadius: const Radius.circular(10.0),
-                    padding: EdgeInsets.only(right: width * 0.05, left: 5.0),
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        color: colorScheme.secondary,
-                        shape: BoxShape.circle,
-                      ),
-                      padding: const EdgeInsets.all(7.0),
-                      margin: EdgeInsets.only(
-                        left: width * 0.05,
-                        top: 15.0,
-                        bottom: 15.0,
-                      ),
-                      child: Icon(
-                        Icons.hourglass_bottom,
-                        color: colorScheme.primary,
-                        size: 25,
-                      ),
-                    ),
-                    center: FittedBox(
-                      child: Text(
-                        (time * _totalTime).toStringAsFixed(0),
-                        style: textTheme.headlineLarge!.copyWith(
+              );
+            }
+            _questions = snapshot.data!;
+            return Column(
+              children: [
+                TweenAnimationBuilder(
+                  duration: Duration(milliseconds: (_totalTime * 1000).toInt()),
+                  tween: Tween(begin: 1.0, end: 0.0),
+                  builder: (context, time, _) {
+                    return LinearPercentIndicator(
+                      percent: time,
+                      lineHeight: 20.0,
+                      barRadius: const Radius.circular(10.0),
+                      padding: EdgeInsets.only(right: width * 0.05, left: 5.0),
+                      leading: Container(
+                        decoration: BoxDecoration(
                           color: colorScheme.secondary,
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(7.0),
+                        margin: EdgeInsets.only(
+                          left: width * 0.05,
+                          top: 15.0,
+                          bottom: 15.0,
+                        ),
+                        child: Icon(
+                          Icons.hourglass_bottom,
+                          color: colorScheme.primary,
+                          size: 25,
                         ),
                       ),
-                    ),
-                    backgroundColor: colorScheme.primary,
-                    progressColor: colorScheme.onBackground,
-                  );
-                },
-              ),
-              Container(
-                color: colorScheme.primary,
-                width: width,
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(_questions.length, (index) {
-                      return Container(
-                        width: 20,
-                        height: 20,
-                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorScheme.onPrimary,
-                            width: 1.5,
+                      center: FittedBox(
+                        child: Text(
+                          (time * _totalTime).toStringAsFixed(0),
+                          style: textTheme.headlineLarge!.copyWith(
+                            color: colorScheme.secondary,
                           ),
                         ),
-                        child: Builder(builder: (context) {
-                          if (_questionStatus[index] == null) {
-                            return const SizedBox.shrink();
-                          } else {
-                            return Icon(
-                              _questionStatus[index]!
-                                  ? Icons.done
-                                  : Icons.close,
-                              size: 15,
-                              color: _questionStatus[index]!
-                                  ? colorScheme.onPrimaryContainer
-                                  : colorScheme.error,
-                            );
-                          }
-                        }),
+                      ),
+                      backgroundColor: colorScheme.primary,
+                      progressColor: colorScheme.onBackground,
+                    );
+                  },
+                ),
+                Container(
+                  color: colorScheme.primary,
+                  width: width,
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(_questions.length, (index) {
+                        return Container(
+                          width: 20,
+                          height: 20,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: colorScheme.onPrimary,
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Builder(builder: (context) {
+                            if (_questionStatus[index] == null) {
+                              return const SizedBox.shrink();
+                            } else {
+                              return Icon(
+                                _questionStatus[index]!
+                                    ? Icons.done
+                                    : Icons.close,
+                                size: 15,
+                                color: _questionStatus[index]!
+                                    ? colorScheme.onPrimaryContainer
+                                    : colorScheme.error,
+                              );
+                            }
+                          }),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                    children: List.generate(_questions.length, (index) {
+                      final List<int> answers = [
+                        _questions[index].ans_1,
+                        _questions[index].ans_2,
+                        _questions[index].ans_3,
+                        _questions[index].correctAns,
+                      ];
+                      return questionPage(
+                        context,
+                        _questions[index].operand_1,
+                        _questions[index].operand_2,
+                        _questions[index].operator,
+                        answers,
                       );
                     }),
                   ),
-                ),
-              ),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  children: List.generate(_questions.length, (index) {
-                    final List<int> answers = [
-                      _questions[index].ans_1,
-                      _questions[index].ans_2,
-                      _questions[index].ans_3,
-                      _questions[index].correctAns,
-                    ];
-                    return questionPage(
-                      context,
-                      _questions[index].operand_1,
-                      _questions[index].operand_2,
-                      _questions[index].operator,
-                      answers,
-                    );
-                  }),
-                ),
-              )
-            ],
-          );
-        },
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -307,19 +317,26 @@ class _QuestionScreenState extends State<QuestionScreen> {
               _stopwatch.elapsedMilliseconds / 1000,
             );
             DatabaseFunctions db = DatabaseFunctions();
-            await db.updateLevel(
-              stars.floor(),
-              widget.args.level,
-              _stopwatch.elapsedMilliseconds / 1000,
-              stars,
-            );
+            final double previousStars =
+                await db.getDoubleStar(widget.args.level);
+            if (previousStars < stars) {
+              await db.updateLevel(
+                stars.floor(),
+                widget.args.level,
+                _stopwatch.elapsedMilliseconds / 1000,
+                stars,
+              );
+            }
             // ignore: use_build_context_synchronously
-            Navigator.pushReplacementNamed(
+            Navigator.pushNamed(
               context,
               'reward',
               arguments: RewardArguments(
                 widget.args.stage,
                 widget.args.level,
+                stars,
+                previousStars,
+                result,
               ),
             );
           }
