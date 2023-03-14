@@ -142,6 +142,15 @@ class DatabaseFunctions {
     return result[0]['doubleStar'];
   }
 
+// check wheather this level is unlocked or not
+  Future<bool> isUnlock(int level) async {
+    Database db = await _dbHelper.database;
+    List<Map<String, dynamic>> result = await db.rawQuery(
+        ''' SELECT COUNT(id) AS id FROM level WHERE id = ? AND status = ? ''',
+        [level, 'Unlocked']);
+    return result[0]['id'] < 1 ? true : false;
+  }
+
 //question table function-----------------------------------------------------------------------------------------------
 
 //store questions in the database
