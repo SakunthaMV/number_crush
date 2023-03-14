@@ -4,14 +4,14 @@ class Level {
   int _stars = 0;
   double _time = 0.0;
   String _status = 'Locked';
-  int _fullTime = 0;
+  double _fullTime = 0;
   double _doubleStar = 0.0;
 
   Level(this._forUnlock, this._stageId);
   Level.withStatus(this._stageId, this._status);
 
   int get forUnlock => _forUnlock;
-  int get fullTIme => _fullTime;
+  double get fullTIme => _fullTime;
   int get stars => _stars;
   int get stageId => _stageId;
   String get status => _status;
