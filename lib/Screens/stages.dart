@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
 import 'package:number_crush/Screens/stage_home.dart';
+import 'package:number_crush/Services/databaseFunctions.dart';
+
+import '../Models/stage.dart';
 
 class Stages extends StatelessWidget {
   static const String route = 'stages';
   const Stages({super.key});
+
+  Future<List<Stage>> _details() async {
+    DatabaseFunctions db = DatabaseFunctions();
+    return await db.getStages();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,22 +24,35 @@ class Stages extends StatelessWidget {
           horizontal: width * 0.1,
           vertical: width * 0.025,
         ),
-        child: ListView.builder(
-          itemCount: 50,
-          itemBuilder: (context, index) {
-            return _stageContainer(context, index);
+        child: FutureBuilder(
+          future: _details(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox();
+            }
+            final List<Stage> fullDetails = snapshot.data!;
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return _stageContainer(context, index, fullDetails);
+              },
+            );
           },
         ),
       ),
     );
   }
 
-  Container _stageContainer(BuildContext context, int index, {int stars = 5}) {
+  Container _stageContainer(
+    BuildContext context,
+    int index,
+    List<Stage> details,
+  ) {
     final double width = MediaQuery.of(context).size.width;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final AppBarTheme appBarTheme = Theme.of(context).appBarTheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final bool locked = index == 4;
+    final bool locked = index == details.length - 1;
     return Container(
       height: 250,
       margin: EdgeInsets.symmetric(vertical: width * 0.03),
@@ -41,8 +62,9 @@ class Stages extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: appBarTheme.backgroundColor,
-                content: const Center(
-                  child: Text('You Need ${135} Stars to Unlock This Stage'),
+                content: Center(
+                  child: Text(
+                      'You Need ${details[index].forUnlock} Stars to Unlock This Stage'),
                 ),
               ),
             );
@@ -50,7 +72,7 @@ class Stages extends StatelessWidget {
             Navigator.pushNamed(
               context,
               StageHome.route,
-              arguments: StageHomeArguments(index + 1, 17),
+              arguments: StageHomeArguments(index + 1),
             );
           }
         },
@@ -97,7 +119,7 @@ class Stages extends StatelessWidget {
                           size: 30,
                           starBoder: colorScheme.tertiary,
                           borderSize: 5.0,
-                          amount: stars,
+                          amount: details[index].stars,
                         ),
                         const SizedBox.shrink(),
                         StarsRow(
@@ -105,7 +127,7 @@ class Stages extends StatelessWidget {
                           color: colorScheme.outline,
                           starBoder: colorScheme.primary,
                           borderSize: 5.0,
-                          amount: 150 - stars,
+                          amount: 150 - details[index].stars,
                         ),
                       ],
                     )
@@ -115,7 +137,7 @@ class Stages extends StatelessWidget {
                       color: colorScheme.outline,
                       starBoder: colorScheme.tertiary,
                       borderSize: 5.0,
-                      amount: 135,
+                      amount: details[index].forUnlock,
                     ),
                 ],
               ),
@@ -161,7 +183,7 @@ class Stages extends StatelessWidget {
                           size: 30,
                           starBoder: colorScheme.tertiary,
                           borderSize: 5.0,
-                          amount: stars,
+                          amount: details[index].stars,
                         ),
                         const SizedBox.shrink(),
                         StarsRow(
@@ -169,7 +191,7 @@ class Stages extends StatelessWidget {
                           color: colorScheme.outline,
                           starBoder: colorScheme.primary,
                           borderSize: 5.0,
-                          amount: 150 - stars,
+                          amount: 150 - details[index].stars,
                         ),
                       ],
                     )
@@ -179,7 +201,7 @@ class Stages extends StatelessWidget {
                       color: colorScheme.outline,
                       starBoder: colorScheme.tertiary,
                       borderSize: 5.0,
-                      amount: 135,
+                      amount: details[index].forUnlock,
                     ),
                 ],
               ),
