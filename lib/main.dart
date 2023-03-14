@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:number_crush/Screens/question_screen.dart';
+import 'package:number_crush/Screens/reward.dart';
 import 'package:number_crush/Screens/settings.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
           secondary: Color(0xFF324D94),
           onSecondary: Color(0xFF041D63),
           secondaryContainer: Color(0xFF8A2626),
+          onSecondaryContainer: Color(0xFF488BDF),
           tertiary: Color(0xFFFFFF00),
         ),
         splashColor: Colors.transparent,
@@ -67,13 +69,28 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+      onGenerateRoute: (settings) {
+        if (settings.name == QuestionScreen.route) {
+          final args = settings.arguments as QuestionScreenArguments;
+          return MaterialPageRoute(
+            builder: (_) => QuestionScreen(args),
+            settings: settings,
+          );
+        } else if (settings.name == Reward.route) {
+          final args = settings.arguments as RewardArguments;
+          return MaterialPageRoute(
+            builder: (_) => Reward(args),
+            settings: settings,
+          );
+        }
+        return null;
+      },
       initialRoute: "/",
       routes: {
         "/": (context) => const Home(),
         Settings.route: (context) => const Settings(),
         Stages.route: (context) => const Stages(),
         StageHome.route: (context) => const StageHome(),
-        QuestionScreen.route: (context) => const QuestionScreen(),
       },
     );
   }

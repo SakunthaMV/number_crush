@@ -34,9 +34,22 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         break;
       case 'stages':
         buttonHome = true;
-        title = Text(
-          'STAGES',
-          style: textTheme.headlineLarge,
+        title = Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'STAGES',
+              style: textTheme.headlineLarge,
+            ),
+            SizedBox(
+              width: width * 0.05,
+            ),
+            StarsRow(
+              starBoder: colorScheme.outlineVariant,
+              amount: 12,
+              borderSize: 5.0,
+            ),
+          ],
         );
         break;
       case 'stage-home':
