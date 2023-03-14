@@ -151,6 +151,14 @@ class DatabaseFunctions {
     return result[0]['id'] < 1 ? false : true;
   }
 
+// to get last unlock level
+  Future<int> lastUnlockLevel() async {
+    Database db = await _dbHelper.database;
+    List<Map<String, dynamic>> result = await db.rawQuery(
+        ''' SELECT MAX(id) AS id FROM level WHERE status = ? ''', ['Unlocked']);
+    return result[0]['id'];
+  }
+
 //question table function-----------------------------------------------------------------------------------------------
 
 //store questions in the database
