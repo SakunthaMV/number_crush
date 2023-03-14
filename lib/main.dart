@@ -5,15 +5,36 @@ import 'package:number_crush/Screens/reward.dart';
 import 'package:number_crush/Screens/settings.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
+import 'package:number_crush/Services/databaseFunctions.dart';
 
 import 'Screens/home.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  void _checkDatabase() async {
+    DatabaseFunctions db = DatabaseFunctions();
+    final bool exist = await db.isExistDataBase(1);
+    if (!exist) {
+      await db.insert(1);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkDatabase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -82,6 +103,12 @@ class MyApp extends StatelessWidget {
             builder: (_) => Reward(args),
             settings: settings,
           );
+        } else if (settings.name == StageHome.route){
+          final args = settings.arguments as StageHomeArguments;
+          return MaterialPageRoute(
+            builder: (_) => StageHome(args),
+            settings: settings,
+          );
         }
         return null;
       },
@@ -90,7 +117,6 @@ class MyApp extends StatelessWidget {
         "/": (context) => const Home(),
         Settings.route: (context) => const Settings(),
         Stages.route: (context) => const Stages(),
-        StageHome.route: (context) => const StageHome(),
       },
     );
   }
