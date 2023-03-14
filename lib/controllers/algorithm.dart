@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:flutter/material.dart';
 import 'package:number_crush/Models/Question.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
 
@@ -128,7 +126,7 @@ class Algorithm {
     int operatorType = _findTypeOfOperator(_operatorList, operator);
     int operandDigit = dataMap['maxOparand'][operatorType];
     int operand_1 = random.nextInt(operandDigit);
-    int operand_2 = random.nextInt(operandDigit);
+    int operand_2 = 1 + random.nextInt(operandDigit - 1);
     double t = double.parse((_timeForQuesion(
             operatorType, '$operand_1'.length, '$operand_2'.length))
         .toStringAsFixed(2));
