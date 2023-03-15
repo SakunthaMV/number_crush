@@ -4,6 +4,7 @@ import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_appbar.dart';
 import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/controllers/vibration_controller.dart';
 
 import '../controllers/audio_controller.dart';
 import 'Widgets/Stars/star.dart';
@@ -129,6 +130,7 @@ class _StageHomeState extends State<StageHome> {
                             setState(() {});
                           });
                         } else {
+                          VibrationController().vibtrate(amplitude: 50);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: appBarTheme.backgroundColor,
@@ -297,7 +299,9 @@ class _StageHomeState extends State<StageHome> {
                           FittedBox(
                             child: Text(
                               level.times.toStringAsFixed(1),
-                              style: textTheme.labelMedium,
+                              style: textTheme.labelMedium!.copyWith(
+                                letterSpacing: 0.0,
+                              ),
                             ),
                           ),
                         ],

@@ -3,6 +3,7 @@ import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/controllers/vibration_controller.dart';
 
 import '../Models/stage.dart';
 import '../controllers/audio_controller.dart';
@@ -65,6 +66,7 @@ class _StagesState extends State<Stages> {
       child: InkWell(
         onTap: () async {
           if (locked) {
+            VibrationController().vibtrate(amplitude: 50);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: appBarTheme.backgroundColor,
