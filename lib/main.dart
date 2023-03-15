@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:number_crush/Screens/open_spash.dart';
+import 'package:number_crush/Screens/about_us.dart';
+import 'package:number_crush/Screens/open_splash.dart';
 import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Screens/reward.dart';
 import 'package:number_crush/Screens/settings.dart';
@@ -101,6 +102,7 @@ class MyApp extends StatelessWidget {
         Settings.route: (context) => const Settings(),
         Stages.route: (context) => const Stages(),
         OpenSplash.route: (context) => const OpenSplash(),
+        AboutUs.route: (context) => const AboutUs(),
       },
     );
   }
