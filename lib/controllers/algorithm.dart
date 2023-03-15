@@ -376,10 +376,9 @@ class Algorithm {
     double value = 0.0;
     if (givenTime / usedTime > 1) {
       value = (1 - (usedTime / givenTime)) + (correctTime / givenTime) * 3;
-    } else {
+    } else if (result.contains(true)) {
       value = (givenTime / usedTime) + (correctTime / givenTime);
     }
-
     return value;
   }
 }
