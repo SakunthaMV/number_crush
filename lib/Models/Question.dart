@@ -23,6 +23,7 @@ class Question {
     _levelId = levelId;
   }
 
+  // ignore: unnecessary_getters_setters
   int get levelId => _levelId;
   int get operand_1 => _operand_1;
   int get operand_2 => _operand_2;
