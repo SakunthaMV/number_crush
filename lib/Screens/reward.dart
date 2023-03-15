@@ -6,7 +6,7 @@ import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_appbar.dart';
 import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Screens/stage_home.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/Services/database_functions.dart';
 import 'package:number_crush/controllers/count_up_animation.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -168,7 +168,7 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
             }
             final int totalStars = snapshot.data!;
             final int previousStars = widget.args.previousStars.floor();
-            final int curruntStars = widget.args.stars.floor();
+            final int currantStars = widget.args.stars.floor();
             return Container(
               color: colorScheme.background,
               padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -178,9 +178,9 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
                   Builder(builder: (context) {
                     int total;
                     int increment;
-                    if (previousStars < curruntStars) {
-                      total = totalStars - (curruntStars - previousStars);
-                      increment = curruntStars - previousStars;
+                    if (previousStars < currantStars) {
+                      total = totalStars - (currantStars - previousStars);
+                      increment = currantStars - previousStars;
                     } else {
                       total = totalStars;
                       increment = 0;
@@ -236,7 +236,7 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
           },
         ),
         Container(
-          color: colorScheme.primary,
+          color: Colors.transparent,
           width: width,
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           margin: const EdgeInsets.only(top: 15.0),

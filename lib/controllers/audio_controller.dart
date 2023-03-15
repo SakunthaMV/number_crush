@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/Services/database_functions.dart';
 
 class AudioController {
   final DatabaseFunctions db = DatabaseFunctions();

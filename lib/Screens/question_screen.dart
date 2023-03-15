@@ -5,7 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:number_crush/Models/Question.dart';
 import 'package:number_crush/Screens/reward.dart';
 import 'package:number_crush/Screens/stage_home.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/Services/database_functions.dart';
 import 'package:number_crush/controllers/algorithm.dart';
 import 'package:number_crush/controllers/vibration_controller.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -310,7 +310,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
             _questionStatus[_currentIndex] = true;
           } else {
             _questionStatus[_currentIndex] = false;
-            VibrationController().vibtrate(duration: 300, amplitude: 100);
+            VibrationController().vibrate(duration: 300, amplitude: 100);
           }
           if (_currentIndex < _questions.length - 1) {
             _pageController.nextPage(

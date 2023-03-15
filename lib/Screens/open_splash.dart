@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../Services/databaseFunctions.dart';
+import '../Services/database_functions.dart';
 
 class OpenSplash extends StatefulWidget {
   static const String route = 'splash';
