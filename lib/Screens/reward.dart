@@ -7,6 +7,7 @@ import 'package:number_crush/Screens/Widgets/common_appbar.dart';
 import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/controllers/count_up_animation.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../controllers/audio_controller.dart';
@@ -83,6 +84,8 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: () {
         Navigator.popUntil(
@@ -102,7 +105,14 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
           children: [
             Align(
               alignment: const Alignment(0, 1),
-              child: Image.asset('images/Reward_Back.jpg'),
+              child: SizedBox(
+                height: height * 0.7,
+                width: width,
+                child: Image.asset(
+                  'images/Reward_Back.jpg',
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
             ConfettiWidget(
               confettiController: _finalAnimationController,
@@ -183,14 +193,10 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
                           starBoder: colorScheme.outlineVariant,
                           amount: total,
                         ),
-                        Text(
-                          '+$increment',
-                          style: textTheme.displayLarge!.copyWith(
-                            fontSize: 27,
-                            letterSpacing: -1,
-                            color: colorScheme.secondary,
-                          ),
-                        ),
+                        CountUpAnimation(
+                          targetNumber: increment,
+                          duration: const Duration(seconds: 3),
+                        )
                       ],
                     );
                   }),

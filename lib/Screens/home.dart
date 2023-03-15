@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
 import 'package:number_crush/controllers/audio_controller.dart';
+import 'package:number_crush/controllers/vibration_controller.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,20 +23,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   late Animation<double> _animation;
   late AnimationController _animationController;
+  final MaterialStatesController _buttonController = MaterialStatesController();
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
-    )..repeat(reverse: true);
-    _animation = Tween(begin: 2.0, end: 15.0).animate(
+      duration: const Duration(milliseconds: 3500),
+    )..repeat();
+    _animation = Tween(begin: 0.0, end: 2 * pi).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Curves.easeIn,
+        curve: Curves.linear,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
+    _buttonController.dispose();
   }
 
   @override
@@ -85,26 +96,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       child: Row(
         children: [
           if (topic == 'PLAY')
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, _) {
-                return Container(
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
                   width: width * 0.2,
                   height: width * 0.2,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: _animation.value,
-                        spreadRadius: _animation.value,
-                        color: colorScheme.secondary.withOpacity(0.25),
-                      )
-                    ],
-                  ),
                   child: ElevatedButton(
-                    onPressed: () {
-                      _commonPress(context, topic);
-                    },
+                    onPressed: () {},
+                    statesController: _buttonController,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.secondary,
                     ),
@@ -113,15 +113,45 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       size: 40,
                     ),
                   ),
-                );
-              },
+                ),
+                AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, _) {
+                    return Transform.rotate(
+                      angle: -_animation.value,
+                      child: CustomPaint(
+                        painter: CometAnimate(),
+                        size: Size(width * 0.2, width * 0.2),
+                      ),
+                    );
+                  },
+                ),
+                InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    _buttonController.update(MaterialState.pressed, true);
+                    _commonPress(context, topic);
+                    await Future.delayed(const Duration(milliseconds: 200));
+                    _buttonController.update(MaterialState.pressed, false);
+                  },
+                  child: Container(
+                    width: width * 0.2,
+                    height: width * 0.2,
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ],
             )
           else
             SizedBox(
               width: width * 0.2,
               height: width * 0.2,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   _commonPress(context, topic);
                 },
                 style: ElevatedButton.styleFrom(
@@ -176,6 +206,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       final int curruntLevel = await db.lastUnlockLevel();
       final int stage = (curruntLevel / 50).ceil();
       await AudioController().play('Play_Button.mp3');
+      VibrationController().vibtrate(amplitude: 70);
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(
         context,
@@ -188,5 +219,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         setState(() {});
       });
     }
+  }
+}
+
+class CometAnimate extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint border = Paint();
+    border.style = PaintingStyle.stroke;
+    border.strokeWidth = 2.0;
+    border.shader = SweepGradient(
+      colors: [
+        const Color(0xFFffd200),
+        Colors.yellow,
+        Colors.yellow.withAlpha(0),
+      ],
+      stops: const [0.0, 0.1, 0.45],
+    ).createShader(Rect.fromLTRB(0, 0, size.width, size.height));
+    canvas.drawCircle(size.center(const Offset(0, 0)), size.width / 2, border);
+
+    Paint dot = Paint();
+    dot.style = PaintingStyle.fill;
+    dot.color = const Color(0xFFffd200);
+    canvas.drawCircle(size.centerRight(const Offset(0, 0)), 2.5, dot);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
