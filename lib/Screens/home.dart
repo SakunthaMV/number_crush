@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
+import 'package:number_crush/Screens/settings.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
 import 'package:number_crush/Services/databaseFunctions.dart';
@@ -74,6 +75,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   Icons.event,
                   'STAGES',
                   'Currunt Level: $level',
+                ),
+                homeRow(
+                  context,
+                  Icons.settings,
+                  'SETTINGS',
+                  'Change Your Preference',
                 ),
               ],
             );
@@ -218,6 +225,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ).then((value) {
         setState(() {});
       });
+    } else if (topic == 'SETTINGS'){
+      Navigator.pushNamed(context, Settings.route);
     }
   }
 }
