@@ -2,7 +2,7 @@
     package="com.example.number_crush">
     <uses-permission android:name="android.permission.VIBRATE" />
    <application
-        android:label="number_crush"
+        android:label="Number Crush"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
