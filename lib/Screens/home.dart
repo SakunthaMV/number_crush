@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
 import 'package:number_crush/Screens/settings.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/Services/database_functions.dart';
 import 'package:number_crush/controllers/audio_controller.dart';
 import 'package:number_crush/controllers/vibration_controller.dart';
 
@@ -17,7 +18,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  Future<int> _currnetLevel() async {
+  Future<int> _currentLevel() async {
     DatabaseFunctions db = DatabaseFunctions();
     return await db.lastUnlockLevel();
   }
@@ -51,40 +52,46 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    return CommonBackground(
-      content: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * 0.1),
-        child: FutureBuilder(
-          future: _currnetLevel(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const SizedBox.shrink();
-            }
-            final int level = snapshot.data!;
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                homeRow(
-                  context,
-                  Icons.play_arrow,
-                  'PLAY',
-                  '${level < 2 ? 'Start' : 'Continue'} Your Journey',
-                ),
-                homeRow(
-                  context,
-                  Icons.event,
-                  'STAGES',
-                  'Currunt Level: $level',
-                ),
-                homeRow(
-                  context,
-                  Icons.settings,
-                  'SETTINGS',
-                  'Change Your Preference',
-                ),
-              ],
-            );
-          },
+    return WillPopScope(
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return Future.value(false);
+      },
+      child: CommonBackground(
+        content: Padding(
+          padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+          child: FutureBuilder(
+            future: _currentLevel(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const SizedBox.shrink();
+              }
+              final int level = snapshot.data!;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  homeRow(
+                    context,
+                    Icons.play_arrow,
+                    'PLAY',
+                    '${level < 2 ? 'Start' : 'Continue'} Your Journey',
+                  ),
+                  homeRow(
+                    context,
+                    Icons.event,
+                    'STAGES',
+                    'Currant Level: $level',
+                  ),
+                  homeRow(
+                    context,
+                    Icons.settings,
+                    'SETTINGS',
+                    'Change Your Preference',
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -210,22 +217,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       await AudioController().play('Normal_Buttons.mp3');
     } else if (topic == 'PLAY') {
       DatabaseFunctions db = DatabaseFunctions();
-      final int curruntLevel = await db.lastUnlockLevel();
-      final int stage = (curruntLevel / 50).ceil();
+      final int currantLevel = await db.lastUnlockLevel();
+      final int stage = (currantLevel / 50).ceil();
       await AudioController().play('Play_Button.mp3');
-      VibrationController().vibtrate(amplitude: 70);
+      VibrationController().vibrate(amplitude: 70);
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(
         context,
         StageHome.route,
         arguments: StageHomeArguments(
           stage,
-          curruntLevel: curruntLevel % 50,
+          currantLevel: currantLevel % 50,
         ),
       ).then((value) {
         setState(() {});
       });
-    } else if (topic == 'SETTINGS'){
+    } else if (topic == 'SETTINGS') {
       Navigator.pushNamed(context, Settings.route);
     }
   }
