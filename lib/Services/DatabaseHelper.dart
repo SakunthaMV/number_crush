@@ -114,7 +114,7 @@ class DatabaseHelper {
      ''');
 
     await db.rawInsert('''
-      INSERT INTO setting VALUES('sound',false);
+      INSERT INTO setting VALUES('sound',true);
       ''');
   }
 }
