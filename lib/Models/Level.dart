@@ -1,17 +1,22 @@
 class Level {
-  int _id = 0;
-  int _toUnlock = 0;
+  int _forUnlock = 0;
   int _stageId = 0;
   int _stars = 0;
   double _time = 0.0;
+  String _status = 'Locked';
+  double _fullTime = 0;
+  double _doubleStar = 0.0;
 
-  Level(this._id, this._toUnlock, this._stageId);
+  Level(this._forUnlock, this._stageId);
+  Level.withStatus(this._stageId, this._status);
 
-  int get id => _id;
-  int get toUnlock => _toUnlock;
+  int get forUnlock => _forUnlock;
+  double get fullTIme => _fullTime;
   int get stars => _stars;
   int get stageId => _stageId;
+  String get status => _status;
   double get times => _time;
+  double get doubleStar => _doubleStar;
 
   set stats(int newStars) {
     _stars = newStars;
@@ -21,22 +26,13 @@ class Level {
     _time = newTime;
   }
 
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
-    map['id'] = _id;
-    map['toUnlock'] = _toUnlock;
-    map['stars'] = _stars;
-    map['stageId'] = _stageId;
-    map['time'] = _time;
-
-    return map;
-  }
-
   Level.fromMap(Map<String, dynamic> map) {
-    _id = map['id'];
-    _toUnlock = map['toUnlock'];
+    _forUnlock = map['forUnlock'];
     _stars = map['stars'];
     _stageId = map['stageId'];
     _time = map['time'];
+    _status = map['status'];
+    _fullTime = map['fullTime'];
+    _doubleStar = map['doubleStar'];
   }
 }

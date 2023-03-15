@@ -1,30 +1,20 @@
 class Stage {
   int _id = 0;
-  int _toUnlock = 0;
+  int _forUnlock = 0;
   int _stars = 0;
+  String _status = 'Locked';
 
-  Stage(this._id, this._toUnlock);
+  Stage(this._forUnlock);
 
   int get id => _id;
-  int get toUnlock => _toUnlock;
+  int get forUnlock => _forUnlock;
   int get stars => _stars;
-
-  set stats(int newStars) {
-    _stars = newStars;
-  }
-
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
-    map['id'] = _id;
-    map['toUnlock'] = _toUnlock;
-    map['stars'] = _stars;
-
-    return map;
-  }
+  String get status => _status;
 
   Stage.fromMap(Map<String, dynamic> map) {
     _id = map['id'];
-    _toUnlock = map['toUnlock'];
+    _forUnlock = map['forUnlock'];
     _stars = map['stars'];
+    _status = map['status'];
   }
 }

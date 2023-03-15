@@ -1,126 +1,226 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
+import 'package:number_crush/Screens/stage_home.dart';
+import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/controllers/vibration_controller.dart';
 
-class Stages extends StatelessWidget {
-  static String route = 'stages';
+import '../Models/stage.dart';
+import '../controllers/audio_controller.dart';
+
+class Stages extends StatefulWidget {
+  static const String route = 'stages';
   const Stages({super.key});
+
+  @override
+  State<Stages> createState() => _StagesState();
+}
+
+class _StagesState extends State<Stages> {
+  Future<List<Stage>> _details() async {
+    DatabaseFunctions db = DatabaseFunctions();
+    return await db.getStages();
+  }
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return CommonBackground(
-      extend: false,
-      content: ListView.builder(
+      content: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: width * 0.05,
+          horizontal: width * 0.1,
           vertical: width * 0.025,
         ),
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return _stageContainer(context, index);
-        },
+        child: FutureBuilder(
+          future: _details(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox();
+            }
+            final List<Stage> fullDetails = snapshot.data!;
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return _stageContainer(context, index, fullDetails);
+              },
+            );
+          },
+        ),
       ),
     );
   }
 
-  Container _stageContainer(BuildContext context, int index, {int stars = 0}) {
+  Container _stageContainer(
+    BuildContext context,
+    int index,
+    List<Stage> details,
+  ) {
     final double width = MediaQuery.of(context).size.width;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final AppBarTheme appBarTheme = Theme.of(context).appBarTheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final bool locked = index == details.length - 1;
     return Container(
       height: 250,
-      margin: EdgeInsets.symmetric(vertical: width * 0.02),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        color: colorScheme.primaryContainer,
-        elevation: 5,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18.0),
+      margin: EdgeInsets.symmetric(vertical: width * 0.03),
+      child: InkWell(
+        onTap: () async {
+          if (locked) {
+            VibrationController().vibtrate(amplitude: 50);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: appBarTheme.backgroundColor,
+                content: Center(
+                  child: Text(
+                      'You Need ${details[index].forUnlock} Stars to Unlock This Stage'),
+                ),
+              ),
+            );
+          } else {
+            await AudioController().play('Normal_Buttons.mp3');
+            // ignore: use_build_context_synchronously
+            Navigator.pushNamed(
+              context,
+              StageHome.route,
+              arguments: StageHomeArguments(index + 1),
+            ).then((value) {
+              setState(() {});
+            });
+          }
+        },
+        splashColor: Theme.of(context).splashColor,
+        highlightColor: Theme.of(context).splashColor,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          color: colorScheme.onSecondaryContainer,
+          elevation: 5,
           child: Stack(
-            alignment: Alignment.centerRight,
+            alignment: Alignment.center,
             children: [
-              CustomPaint(
-                painter: StageShape(),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: width * 0.1),
-                    child: Opacity(
-                      opacity: 0.2,
-                      child: Text(
-                        '${index + 1}',
-                        style: textTheme.displayLarge?.copyWith(
-                          color: colorScheme.onBackground,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    'STAGE',
+                    style: textTheme.displaySmall!.copyWith(
+                      color: colorScheme.primary,
+                      height: 0.8,
+                    ),
+                  ),
+                  if (!locked)
+                    Text(
+                      '${index + 1}',
+                      style: textTheme.displayMedium!.copyWith(
+                        color: colorScheme.primary,
+                        height: 0.7,
+                      ),
+                    )
+                  else
+                    Icon(
+                      Icons.lock,
+                      size: 90,
+                      color: colorScheme.primary,
+                    ),
+                  if (!locked)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        StarsRow(
+                          size: 30,
+                          starBoder: colorScheme.tertiary,
+                          borderSize: 5.0,
+                          amount: details[index].stars,
                         ),
+                        const SizedBox.shrink(),
+                        StarsRow(
+                          size: 30,
+                          color: colorScheme.outline,
+                          starBoder: colorScheme.primary,
+                          borderSize: 5.0,
+                          amount: 150 - details[index].stars,
+                        ),
+                      ],
+                    )
+                  else
+                    StarsRow(
+                      size: 30,
+                      color: colorScheme.outline,
+                      starBoder: colorScheme.tertiary,
+                      borderSize: 5.0,
+                      amount: details[index].forUnlock,
+                    ),
+                ],
+              ),
+              if (locked)
+                Container(
+                  decoration: BoxDecoration(
+                    color: appBarTheme.backgroundColor!.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Opacity(
+                    opacity: 0.0,
+                    child: Text(
+                      'STAGE',
+                      style: textTheme.displaySmall!.copyWith(
+                        color: colorScheme.primary,
+                        height: 0.8,
                       ),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: width * 0.05),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    StarsRow(
-                      size: 30.0,
-                      amount: stars,
-                    ),
-                    StarsRow(
-                      size: 30.0,
-                      amount: 113,
-                      color: colorScheme.primaryContainer,
-                    ),
-                    const SizedBox(
-                      height: 30.0,
-                    ),
+                  if (!locked)
                     Text(
-                      'STAGE ${index + 1}',
-                      style: textTheme.displayLarge?.copyWith(
-                        fontSize: 30.0,
+                      '${index + 1}',
+                      style: textTheme.displayMedium!.copyWith(
                         color: colorScheme.primary,
+                        height: 0.7,
                       ),
                     )
-                  ],
-                ),
+                  else
+                    Icon(
+                      Icons.lock,
+                      size: 90,
+                      color: colorScheme.primary,
+                    ),
+                  if (!locked)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        StarsRow(
+                          size: 30,
+                          starBoder: colorScheme.tertiary,
+                          borderSize: 5.0,
+                          amount: details[index].stars,
+                        ),
+                        const SizedBox.shrink(),
+                        StarsRow(
+                          size: 30,
+                          color: colorScheme.outline,
+                          starBoder: colorScheme.primary,
+                          borderSize: 5.0,
+                          amount: 150 - details[index].stars,
+                        ),
+                      ],
+                    )
+                  else
+                    StarsRow(
+                      size: 30,
+                      color: colorScheme.outline,
+                      starBoder: colorScheme.tertiary,
+                      borderSize: 5.0,
+                      amount: details[index].forUnlock,
+                    ),
+                ],
               ),
             ],
           ),
         ),
       ),
     );
-  }
-}
-
-class StageShape extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint();
-    paint.shader = ui.Gradient.linear(
-      Offset(0.0, size.height),
-      Offset(size.width * 0.7, 0.0),
-      [const Color(0xFFA5A4C2), const Color(0xFF5A5261)],
-    );
-    paint.style = PaintingStyle.fill;
-    var path = Path();
-
-    path.lineTo(18.0, 0.0);
-    path.lineTo(size.width * 0.32, 35.0);
-    path.lineTo(size.width * 0.7, 0.0);
-    path.lineTo(size.width * 0.32, size.height);
-    path.lineTo(0.0, size.height);
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
   }
 }

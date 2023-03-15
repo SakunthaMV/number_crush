@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:number_crush/Services/databaseFunctions.dart';
 
 import 'Widgets/common_background.dart';
 
-
 class Settings extends StatefulWidget {
-  static String route = 'settings';
+  static const String route = 'settings';
   const Settings({super.key});
 
   @override
@@ -12,14 +12,17 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  late bool _vibrationStatus;
   late bool _soundStatus;
+  late bool _vibrationStatus;
 
-  @override
-  void initState() {
-    super.initState();
-    _vibrationStatus = true;
-    _soundStatus = false;
+  Future<bool> _vibration() async {
+    final DatabaseFunctions db = DatabaseFunctions();
+    return await db.getSettingStatus('vibration');
+  }
+
+  Future<bool> _sound() async {
+    final DatabaseFunctions db = DatabaseFunctions();
+    return await db.getSettingStatus('sound');
   }
 
   @override
@@ -31,17 +34,39 @@ class _SettingsState extends State<Settings> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            settingsRow(context, Icons.done, 'Vibration', _vibrationStatus ? 'On' : 'Off'),
-            settingsRow(context, Icons.done, 'Sound', _soundStatus ? 'On' : 'Off'),
+            FutureBuilder(
+              future: _vibration(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox.shrink();
+                }
+                _vibrationStatus = snapshot.data!;
+                return settingsRow(context, Icons.done, 'Vibration',
+                    _vibrationStatus ? 'On' : 'Off');
+              },
+            ),
+            FutureBuilder(
+              future: _sound(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox.shrink();
+                }
+                _soundStatus = snapshot.data!;
+                return settingsRow(
+                    context, Icons.done, 'Sound', _soundStatus ? 'On' : 'Off');
+              },
+            ),
             settingsRow(context, Icons.star, 'Rate Us', 'Your Experience'),
-            settingsRow(context, Icons.question_mark, 'About Us', 'Application Info'),
+            settingsRow(
+                context, Icons.question_mark, 'About Us', 'Application Info'),
           ],
         ),
       ),
     );
   }
 
-  Widget settingsRow(BuildContext context, IconData icon, String topic, String subTopic) {
+  Widget settingsRow(
+      BuildContext context, IconData icon, String topic, String subTopic) {
     final double width = MediaQuery.of(context).size.width;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     Color? backgroundColor;
@@ -76,12 +101,15 @@ class _SettingsState extends State<Settings> {
             width: 60,
             height: 60,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
+                  final DatabaseFunctions db = DatabaseFunctions();
                   if (topic == 'Vibration') {
                     _vibrationStatus = !_vibrationStatus;
+                    db.setSettingStatus('vibration', _vibrationStatus);
                   } else if (topic == 'Sound') {
                     _soundStatus = !_soundStatus;
+                    db.setSettingStatus('sound', _soundStatus);
                   }
                 });
               },
@@ -102,7 +130,10 @@ class _SettingsState extends State<Settings> {
                 children: [
                   Text(
                     topic,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 25.0),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontSize: 25.0),
                   ),
                   Text(
                     subTopic,
