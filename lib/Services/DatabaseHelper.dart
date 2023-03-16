@@ -101,9 +101,9 @@ class DatabaseHelper {
       END
       ''');
 
-    await db.execute(''' CREATE INDEX leveId_index ON question(levelId) ''');
+    await db.execute(''' CREATE INDEX status_Index ON level(status) ''');
 
-    await db.execute(''' CREATE INDEX stageId_index ON level(stageId) ''');
+    await db.execute(''' CREATE INDEX forUnlock_Index ON level(forUnlock) ''');
 
     await db.rawInsert('''
       INSERT INTO stage(stars,status,forUnlock) VALUES(0,'Unlocked',0);
