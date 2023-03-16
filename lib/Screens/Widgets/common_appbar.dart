@@ -121,6 +121,13 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: textTheme.headlineLarge,
         );
         break;
+      case 'privacy-policy':
+        buttonHome = true;
+        title = Text(
+          'PRIVACY POLICY',
+          style: textTheme.headlineLarge,
+        );
+        break;
     }
     return AppBar(
       backgroundColor: backgroundColor,

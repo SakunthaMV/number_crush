@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/about_us.dart';
+import 'package:number_crush/Screens/privacy_policy.dart';
 import 'package:number_crush/Services/database_functions.dart';
 import 'package:number_crush/controllers/vibration_controller.dart';
 
@@ -32,7 +33,7 @@ class _SettingsState extends State<Settings> {
     final double width = MediaQuery.of(context).size.width;
     return CommonBackground(
       content: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * 0.2 + 10),
+        padding: EdgeInsets.only(left: width * 0.2 + 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -60,7 +61,17 @@ class _SettingsState extends State<Settings> {
             ),
             settingsRow(context, Icons.star, 'Rate Us', 'Your Experience'),
             settingsRow(
-                context, Icons.question_mark, 'About Us', 'Application Info'),
+              context,
+              Icons.question_mark,
+              'About Us',
+              'Application Info',
+            ),
+            settingsRow(
+              context,
+              Icons.policy_outlined,
+              'Privacy Policy',
+              'About Your Privacy',
+            ),
           ],
         ),
       ),
@@ -118,6 +129,8 @@ class _SettingsState extends State<Settings> {
                   db.setSettingStatus('sound', _soundStatus);
                 } else if (topic == 'About Us') {
                   Navigator.pushNamed(context, AboutUs.route);
+                } else if (topic == 'Privacy Policy') {
+                  Navigator.pushNamed(context, PrivacyPolicy.route);
                 }
               },
               style: ElevatedButton.styleFrom(
