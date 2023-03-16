@@ -234,6 +234,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       });
     } else if (topic == 'SETTINGS') {
       Navigator.pushNamed(context, Settings.route);
+      await AudioController().play('Normal_Buttons.mp3');
     }
   }
 }
@@ -246,17 +247,16 @@ class CometAnimate extends CustomPainter {
     border.strokeWidth = 2.0;
     border.shader = SweepGradient(
       colors: [
-        const Color(0xFFffd200),
-        Colors.yellow,
-        Colors.yellow.withAlpha(0),
+        const Color(0xFFA8BDF4),
+        const Color(0xFFA8BDF4).withAlpha(0),
       ],
-      stops: const [0.0, 0.1, 0.45],
+      stops: const [0.0, 0.45],
     ).createShader(Rect.fromLTRB(0, 0, size.width, size.height));
     canvas.drawCircle(size.center(const Offset(0, 0)), size.width / 2, border);
 
     Paint dot = Paint();
     dot.style = PaintingStyle.fill;
-    dot.color = const Color(0xFFffd200);
+    dot.color = const Color(0xFFA8BDF4);
     canvas.drawCircle(size.centerRight(const Offset(0, 0)), 2.5, dot);
   }
 

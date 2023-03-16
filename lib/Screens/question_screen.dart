@@ -305,12 +305,13 @@ class _QuestionScreenState extends State<QuestionScreen> {
       margin: EdgeInsets.all(width * 0.025),
       child: BouncingWidget(
         onPressed: () async {
-          await AudioController().play('Answer_Buttons.mp3');
           if (answer == _questions[_currentIndex].correctAns) {
             _questionStatus[_currentIndex] = true;
+            await AudioController().play('Correct_Answer.mp3');
           } else {
             _questionStatus[_currentIndex] = false;
             VibrationController().vibrate(duration: 300, amplitude: 100);
+            await AudioController().play('Wrong_Answer.mp3');
           }
           if (_currentIndex < _questions.length - 1) {
             _pageController.nextPage(
