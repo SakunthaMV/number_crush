@@ -1,39 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:number_crush/Screens/about_us.dart';
+import 'package:number_crush/Screens/open_splash.dart';
 import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Screens/reward.dart';
 import 'package:number_crush/Screens/settings.dart';
 import 'package:number_crush/Screens/stage_home.dart';
 import 'package:number_crush/Screens/stages.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
 
 import 'Screens/home.dart';
 
-void main() async {
+void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  void _checkDatabase() async {
-    DatabaseFunctions db = DatabaseFunctions();
-    final bool exist = await db.isExistDataBase(1);
-    if (!exist) {
-      await db.insert(1);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkDatabase();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +54,10 @@ class _MyAppState extends State<MyApp> {
           displayLarge: GoogleFonts.robotoMono(
             fontSize: 150.0,
           ),
-          displayMedium:
-              const TextStyle(fontFamily: 'Pony Maker', fontSize: 100),
+          displayMedium: const TextStyle(
+            fontFamily: 'Pony Maker',
+            fontSize: 100,
+          ),
           displaySmall: const TextStyle(fontFamily: 'Snack', fontSize: 60),
           headlineLarge: GoogleFonts.ubuntu(
             fontSize: 30.0,
@@ -103,7 +87,7 @@ class _MyAppState extends State<MyApp> {
             builder: (_) => Reward(args),
             settings: settings,
           );
-        } else if (settings.name == StageHome.route){
+        } else if (settings.name == StageHome.route) {
           final args = settings.arguments as StageHomeArguments;
           return MaterialPageRoute(
             builder: (_) => StageHome(args),
@@ -112,11 +96,13 @@ class _MyAppState extends State<MyApp> {
         }
         return null;
       },
-      initialRoute: "/",
+      initialRoute: OpenSplash.route,
       routes: {
         "/": (context) => const Home(),
         Settings.route: (context) => const Settings(),
         Stages.route: (context) => const Stages(),
+        OpenSplash.route: (context) => const OpenSplash(),
+        AboutUs.route: (context) => const AboutUs(),
       },
     );
   }

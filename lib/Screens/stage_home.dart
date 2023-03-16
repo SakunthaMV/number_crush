@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:number_crush/Models/Level.dart';
+import 'package:number_crush/Models/level.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_appbar.dart';
 import 'package:number_crush/Screens/question_screen.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/Services/database_functions.dart';
 import 'package:number_crush/controllers/vibration_controller.dart';
 
 import '../controllers/audio_controller.dart';
@@ -48,13 +48,13 @@ class _StageHomeState extends State<StageHome> {
   @override
   void initState() {
     super.initState();
-    if (widget.args.curruntLevel != null) {
+    if (widget.args.currantLevel != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_controller.hasClients) {
-          _toItem(widget.args.curruntLevel!);
+          _toItem(widget.args.currantLevel!);
         } else {
           Future.delayed(const Duration(milliseconds: 400)).then((value) {
-            _toItem(widget.args.curruntLevel!);
+            _toItem(widget.args.currantLevel!);
           });
         }
       });
@@ -130,13 +130,13 @@ class _StageHomeState extends State<StageHome> {
                             setState(() {});
                           });
                         } else {
-                          VibrationController().vibtrate(amplitude: 50);
+                          VibrationController().vibrate(amplitude: 50);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: appBarTheme.backgroundColor,
                               content: Center(
                                 child: Text(
-                                    'You Need ${details[index].forUnlock} Stars to Unlock This Stage'),
+                                    'You Need ${details[index].forUnlock} More Stars to Unlock This Level'),
                               ),
                             ),
                           );
@@ -355,6 +355,6 @@ class _StageHomeState extends State<StageHome> {
 
 class StageHomeArguments {
   final int stage;
-  final int? curruntLevel;
-  StageHomeArguments(this.stage, {this.curruntLevel});
+  final int? currantLevel;
+  StageHomeArguments(this.stage, {this.currantLevel});
 }

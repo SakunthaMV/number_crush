@@ -1,9 +1,9 @@
 import 'package:number_crush/Models/Question.dart';
 import 'package:number_crush/controllers/algorithm.dart';
 import 'package:sqflite/sqflite.dart';
-import '../Models/Level.dart';
+import '../Models/level.dart';
 import '../Models/stage.dart';
-import 'DatabaseHelper.dart';
+import 'database_helper.dart';
 
 class DatabaseFunctions {
   final Algorithm _algorithm = Algorithm();
@@ -21,7 +21,7 @@ class DatabaseFunctions {
     return status;
   }
 
-// set status of relevent setting
+// set status of relevant setting
   void setSettingStatus(String key, bool value) async {
     Database db = await _dbHelper.database;
     await db.rawUpdate(
@@ -53,7 +53,7 @@ class DatabaseFunctions {
 
   Future getAll(String tableName) async {
     Database db = await _dbHelper.database;
-    return await db.rawQuery(''' SELECT * FROM ${tableName} ''');
+    return await db.rawQuery(''' SELECT * FROM $tableName ''');
   }
 
 //get number of stars till that moment
@@ -86,15 +86,15 @@ class DatabaseFunctions {
 
 // update level done details
   Future<void> updateLevel(
-      int star, int id, double time, double doubeStar) async {
+      int star, int id, double time, double doubleStar) async {
     Database db = await _dbHelper.database;
     await db.rawUpdate(
         ''' UPDATE level SET stars = ? , time = ?, doubleStar = ? WHERE id = ? ''',
-        [star, time, doubeStar, id]);
+        [star, time, doubleStar, id]);
 
     await db.rawUpdate(
         ''' UPDATE level SET stars = ? , time = ?, doubleStar = ? WHERE id = ? ''',
-        [star, time, doubeStar, id]);
+        [star, time, doubleStar, id]);
 
     List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT status,id FROM stage WHERE id = (SELECT MAX(id) FROM stage) ''');
@@ -128,7 +128,7 @@ class DatabaseFunctions {
   }
 
 // update given time for this level
-  Future<void> updateLevelfullTime(int level, double fullTime) async {
+  Future<void> updateLevelFullTime(int level, double fullTime) async {
     Database database = await _dbHelper.database;
     await database.rawUpdate(
         ''' UPDATE level SET fullTime = ? WHERE id = ? ''', [fullTime, level]);
@@ -142,7 +142,7 @@ class DatabaseFunctions {
     return result[0]['doubleStar'];
   }
 
-// check wheather this level is unlocked or not
+// check weather this level is unlocked or not
   Future<bool> isUnlock(int level) async {
     Database db = await _dbHelper.database;
     List<Map<String, dynamic>> result = await db.rawQuery(
@@ -192,7 +192,7 @@ class DatabaseFunctions {
     return questionList;
   }
 
-// is this levelid existed in question
+// is this levelId existed in question
 
   Future<bool> ifExist(int level) async {
     Database db = await _dbHelper.database;

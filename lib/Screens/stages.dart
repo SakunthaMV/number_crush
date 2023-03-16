@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
 import 'package:number_crush/Screens/stage_home.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/Services/database_functions.dart';
 import 'package:number_crush/controllers/vibration_controller.dart';
 
 import '../Models/stage.dart';
@@ -66,13 +66,13 @@ class _StagesState extends State<Stages> {
       child: InkWell(
         onTap: () async {
           if (locked) {
-            VibrationController().vibtrate(amplitude: 50);
+            VibrationController().vibrate(amplitude: 50);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: appBarTheme.backgroundColor,
                 content: Center(
                   child: Text(
-                      'You Need ${details[index].forUnlock} Stars to Unlock This Stage'),
+                      'You Need ${details[index].forUnlock} More Stars to Unlock This Stage'),
                 ),
               ),
             );
