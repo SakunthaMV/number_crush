@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:number_crush/Screens/Widgets/Stars/star.dart';
 
 class StarsRow extends StatelessWidget {

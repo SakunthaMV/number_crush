@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/Screens/about_us.dart';
+import 'package:number_crush/Services/database_functions.dart';
+import 'package:number_crush/controllers/vibration_controller.dart';
 
 import 'Widgets/common_background.dart';
 
@@ -102,16 +104,21 @@ class _SettingsState extends State<Settings> {
             height: 60,
             child: ElevatedButton(
               onPressed: () async {
-                setState(() {
-                  final DatabaseFunctions db = DatabaseFunctions();
-                  if (topic == 'Vibration') {
+                final DatabaseFunctions db = DatabaseFunctions();
+                if (topic == 'Vibration') {
+                  setState(() {
                     _vibrationStatus = !_vibrationStatus;
-                    db.setSettingStatus('vibration', _vibrationStatus);
-                  } else if (topic == 'Sound') {
+                  });
+                  db.setSettingStatus('vibration', _vibrationStatus);
+                  VibrationController().vibrate();
+                } else if (topic == 'Sound') {
+                  setState(() {
                     _soundStatus = !_soundStatus;
-                    db.setSettingStatus('sound', _soundStatus);
-                  }
-                });
+                  });
+                  db.setSettingStatus('sound', _soundStatus);
+                } else if (topic == 'About Us') {
+                  Navigator.pushNamed(context, AboutUs.route);
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: backgroundColor,

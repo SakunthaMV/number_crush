@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:number_crush/Models/Question.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
+import 'package:number_crush/Services/database_functions.dart';
 
-import '../Models/Level.dart';
+import '../Models/level.dart';
 import '../Models/stage.dart';
 
 class Algorithm {
@@ -372,7 +372,7 @@ class Algorithm {
       }
       givenTime += questions[i].time;
     }
-    await db.updateLevelfullTime(level, givenTime);
+    await db.updateLevelFullTime(level, givenTime);
     double value = 0.0;
     if (givenTime / usedTime > 1) {
       value = (1 - (usedTime / givenTime)) + (correctTime / givenTime) * 3;

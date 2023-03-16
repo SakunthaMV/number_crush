@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/question_screen.dart';
-import 'package:number_crush/Services/databaseFunctions.dart';
-
-import '../settings.dart';
+import 'package:number_crush/Services/database_functions.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int stageNo;
   final int level;
-  const CommonAppBar({super.key, this.stageNo = 5, this.level = 23});
+  const CommonAppBar({super.key, this.stageNo = 1, this.level = 1});
 
   Future<int> _stars() async {
     DatabaseFunctions db = DatabaseFunctions();
@@ -26,12 +24,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     Color? backgroundColor = appBarTheme.backgroundColor;
     Widget title = const SizedBox.shrink();
     Brightness iconBrightness = Brightness.light;
-    bool buttonSettings = false;
     bool buttonHome = false;
     bool buttonRefresh = false;
     switch (route) {
       case '/':
-        buttonSettings = true;
         backgroundColor = Colors.transparent;
         iconBrightness = Brightness.dark;
         break;
@@ -118,6 +114,13 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: textTheme.headlineLarge,
         );
         break;
+      case 'about-us':
+        buttonHome = true;
+        title = Text(
+          'ABOUT US',
+          style: textTheme.headlineLarge,
+        );
+        break;
     }
     return AppBar(
       backgroundColor: backgroundColor,
@@ -133,7 +136,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: title,
       actions: [
-        if (buttonSettings) actionButton(context, Icons.settings),
         if (buttonHome) actionButton(context, Icons.home),
         if (buttonRefresh) actionButton(context, Icons.refresh),
       ],
@@ -147,10 +149,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       margin: const EdgeInsets.only(right: 15.0),
       child: ElevatedButton(
         onPressed: () async {
-          if (icon == Icons.settings) {
-            Navigator.pushNamed(context, Settings.route);
-          } else if (icon == Icons.home) {
-            Navigator.popUntil(context, (route) => route.isFirst);
+          if (icon == Icons.home) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
           } else {
             Navigator.pushReplacementNamed(
               context,
@@ -158,9 +158,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
               arguments: QuestionScreenArguments(stageNo, level),
             );
           }
-          // DatabaseFunctions db = DatabaseFunctions();
-          // var c = await db.getAll('level');
-          // print(c[0]);
         },
         child: Icon(
           icon,
