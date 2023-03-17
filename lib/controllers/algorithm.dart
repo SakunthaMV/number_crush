@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:number_crush/Models/Question.dart';
 import 'package:number_crush/Services/database_functions.dart';
 
-import '../Models/level.dart';
 import '../Models/stage.dart';
 
 class Algorithm {

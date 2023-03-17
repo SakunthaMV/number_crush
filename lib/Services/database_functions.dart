@@ -6,7 +6,6 @@ import '../Models/stage.dart';
 import 'database_helper.dart';
 
 class DatabaseFunctions {
-  final Algorithm _algorithm = Algorithm();
   final DatabaseHelper _dbHelper = DatabaseHelper.instance;
 
 // Setting table function-----------------------------------------------------------------------------------------------
@@ -58,6 +57,14 @@ class DatabaseFunctions {
     return stars[0]['stars'];
   }
 
+// to get last unlock stage
+  Future<int> lastUnlockStage() async {
+    Database db = await _dbHelper.database;
+    List<Map<String, dynamic>> result = await db.rawQuery(
+        ''' SELECT MAX(id) AS id FROM stage WHERE status = ? ''', ['Unlocked']);
+    return result[0]['id'];
+  }
+
 //Level table functions-------------------------------------------------------------------------------------------------
 
 // update level done details
@@ -78,6 +85,7 @@ class DatabaseFunctions {
     Algorithm algorithm = Algorithm();
     int stars = await getStars();
     int lastLevel = await lastUnlockLevel();
+    int lastStage = await lastUnlockStage();
     if (result[0]['status'] == 'Unlocked') {
       await db.rawInsert(
           ''' INSERT INTO stage(stars,status,forUnlock) VALUES(?,?,?) ''',
@@ -87,7 +95,8 @@ class DatabaseFunctions {
     for (int i = 1; i < 4; i++) {
       if (algorithm.toUnlockStar(lastLevel + i) <= stars) {
         await db.rawInsert(
-            '''INSERT INTO level(stageId,stars,time,fulltime,doubleStar) VALUES(1,0,0,0,0);''');
+            '''INSERT INTO level(stageId,stars,time,fulltime,doubleStar) VALUES(?,?,?,?,?);''',
+            [lastStage, 0, 0, 0, 0]);
       }
     }
   }
