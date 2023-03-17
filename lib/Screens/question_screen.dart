@@ -1,7 +1,6 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:number_crush/Models/Question.dart';
 import 'package:number_crush/Screens/reward.dart';
 import 'package:number_crush/Screens/stage_home.dart';
@@ -30,7 +29,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
   double _totalTime = 0.0;
   late List<Question> _questions;
   final Stopwatch _stopwatch = Stopwatch();
-  late bool _isCalculating = false;
 
   Future<List<Question>> _generatedQuestion() async {
     DatabaseFunctions db = DatabaseFunctions();
@@ -179,40 +177,30 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   ),
                 ),
                 Expanded(
-                  child: Builder(builder: (context) {
-                    if (_isCalculating) {
-                      return Center(
-                        child: LoadingAnimationWidget.threeArchedCircle(
-                          color: colorScheme.secondary,
-                          size: 80,
-                        ),
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                    children: List.generate(_questions.length, (index) {
+                      final List<int> answers = [
+                        _questions[index].ans_1,
+                        _questions[index].ans_2,
+                        _questions[index].ans_3,
+                        _questions[index].correctAns,
+                      ];
+                      return questionPage(
+                        context,
+                        _questions[index].operand_1,
+                        _questions[index].operand_2,
+                        _questions[index].operator,
+                        answers,
                       );
-                    }
-                    return PageView(
-                      controller: _pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentIndex = index;
-                        });
-                      },
-                      children: List.generate(_questions.length, (index) {
-                        final List<int> answers = [
-                          _questions[index].ans_1,
-                          _questions[index].ans_2,
-                          _questions[index].ans_3,
-                          _questions[index].correctAns,
-                        ];
-                        return questionPage(
-                          context,
-                          _questions[index].operand_1,
-                          _questions[index].operand_2,
-                          _questions[index].operator,
-                          answers,
-                        );
-                      }),
-                    );
-                  }),
+                    }),
+                  ),
                 )
               ],
             );
@@ -322,9 +310,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
               _currentIndex++;
             });
           } else {
-            setState(() {
-              _isCalculating = true;
-            });
             _stopwatch.stop();
             _questionStatus.removeWhere((item) => item == null);
             List<bool> result = [];
@@ -347,9 +332,6 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 stars,
               );
             }
-            setState(() {
-              _isCalculating = false;
-            });
             // ignore: use_build_context_synchronously
             Navigator.pushNamed(
               context,
