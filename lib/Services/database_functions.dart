@@ -85,7 +85,7 @@ class DatabaseFunctions {
     }
 
     for (int i = 1; i < 4; i++) {
-      if (algorithm.toUnlockStar(lastLevel + i) < stars) {
+      if (algorithm.toUnlockStar(lastLevel + i) <= stars) {
         await db.rawInsert(
             '''INSERT INTO level(stageId,stars,time,fulltime,doubleStar) VALUES(1,0,0,0,0);''');
       }
