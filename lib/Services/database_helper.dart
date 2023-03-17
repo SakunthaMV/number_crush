@@ -85,7 +85,7 @@ class DatabaseHelper {
       AFTER UPDATE ON level
       FOR EACH ROW
       BEGIN
-      UPDATE stage SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0; 
+      UPDATE stage SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0 AND status = 'Locked' ; 
       END
       ''');
 
