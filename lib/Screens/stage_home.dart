@@ -27,10 +27,18 @@ class _StageHomeState extends State<StageHome> {
   }
 
   void _toItem(int item) {
+    final double statusBarHeight = MediaQuery.of(context).viewPadding.top;
+    final double appBarHeight = AppBar().preferredSize.height;
     final int pos = ((item - 1) / 3).floor();
-    final double height =
-        _controller.position.maxScrollExtent + context.size!.height - 95.0;
-    final double value = (pos / 17) * height;
+    final double height = _controller.position.maxScrollExtent +
+        context.size!.height -
+        appBarHeight -
+        statusBarHeight;
+    final double value = (pos / 17) * height -
+        (context.size!.height / 2 -
+            appBarHeight -
+            statusBarHeight -
+            ((1 / 17) * height) / 2);
     final double newValue = value > _controller.position.maxScrollExtent
         ? _controller.position.maxScrollExtent
         : value;
