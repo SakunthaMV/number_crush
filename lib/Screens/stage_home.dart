@@ -4,6 +4,7 @@ import 'package:number_crush/Screens/Widgets/Stars/stars_row.dart';
 import 'package:number_crush/Screens/Widgets/common_appbar.dart';
 import 'package:number_crush/Screens/question_screen.dart';
 import 'package:number_crush/Services/database_functions.dart';
+import 'package:number_crush/controllers/algorithm.dart';
 import 'package:number_crush/controllers/vibration_controller.dart';
 
 import '../controllers/audio_controller.dart';
@@ -23,11 +24,6 @@ class _StageHomeState extends State<StageHome> {
   Future<List<Level>> _levelDetails(int stage) async {
     DatabaseFunctions db = DatabaseFunctions();
     return await db.getLevels(stage);
-  }
-
-  Future<int> _stars() async {
-    DatabaseFunctions db = DatabaseFunctions();
-    return await db.getStars();
   }
 
   void _toItem(int item) {
@@ -116,7 +112,7 @@ class _StageHomeState extends State<StageHome> {
                       highlightColor: Theme.of(context).splashColor,
                       splashColor: Theme.of(context).splashColor,
                       onTap: () async {
-                        if (details[index].status == 'Unlocked') {
+                        if (details.length >= index + 1) {
                           await AudioController().play('Normal_Buttons.mp3');
                           // ignore: use_build_context_synchronously
                           Navigator.pushNamed(
@@ -131,12 +127,17 @@ class _StageHomeState extends State<StageHome> {
                           });
                         } else {
                           VibrationController().vibrate(amplitude: 50);
+                          final int unlockStars = Algorithm().toUnlockStar(
+                              (args.stage - 1) * 50 + (index + 1));
+                          final int totalStars =
+                              await DatabaseFunctions().getStars();
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: appBarTheme.backgroundColor,
                               content: Center(
                                 child: Text(
-                                    'You Need ${details[index].forUnlock} More Stars to Unlock This Level'),
+                                    'You Need ${unlockStars - totalStars} More Stars to Unlock This Level'),
                               ),
                             ),
                           );
@@ -152,10 +153,13 @@ class _StageHomeState extends State<StageHome> {
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         child: tileContent(
-                            context,
-                            index,
-                            details[index].status == 'Unlocked',
-                            details[index]),
+                          context,
+                          index,
+                          details.length >= index + 1,
+                          level: details.length >= index + 1
+                              ? details[index]
+                              : null,
+                        ),
                       ),
                     );
                   }),
@@ -169,9 +173,9 @@ class _StageHomeState extends State<StageHome> {
   Widget tileContent(
     BuildContext context,
     int index,
-    bool unlocked,
-    Level level,
-  ) {
+    bool unlocked, {
+    Level? level,
+  }) {
     var args = ModalRoute.of(context)?.settings.arguments as StageHomeArguments;
     final double width = MediaQuery.of(context).size.width;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -194,7 +198,7 @@ class _StageHomeState extends State<StageHome> {
                         size: 20,
                         borderSize: 5.0,
                         boderColor: colorScheme.outlineVariant,
-                        color: level.stars >= 1
+                        color: level!.stars >= 1
                             ? colorScheme.tertiary
                             : colorScheme.primary,
                       ),
@@ -235,18 +239,11 @@ class _StageHomeState extends State<StageHome> {
                     ),
                   ),
                   child: Center(
-                    child: FutureBuilder(
-                      future: _stars(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const SizedBox.shrink();
-                        }
-                        return StarsRow(
-                          amount: level.forUnlock + snapshot.data!,
-                          size: 20,
-                          starBoder: Colors.transparent,
-                        );
-                      },
+                    child: StarsRow(
+                      amount: Algorithm()
+                          .toUnlockStar((args.stage - 1) * 50 + (index + 1)),
+                      size: 20,
+                      starBoder: Colors.transparent,
                     ),
                   ),
                 ),
@@ -280,7 +277,7 @@ class _StageHomeState extends State<StageHome> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (unlocked)
-                    if (level.times < 0.1)
+                    if (level!.times < 0.1)
                       const Icon(
                         Icons.lock_open,
                         size: 18,
@@ -313,7 +310,7 @@ class _StageHomeState extends State<StageHome> {
                       style: textTheme.labelMedium,
                       children: [
                         TextSpan(
-                          text: '${level.stars}',
+                          text: '${level != null ? level.stars : 0}',
                           style: const TextStyle(
                             fontSize: 17,
                           ),
