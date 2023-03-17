@@ -36,9 +36,18 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
   late AnimationController _thirdStarController;
   final ConfettiController _finalAnimationController = ConfettiController();
 
+  void _complete() async {
+    if (widget.args.stars >= 1.0) {
+      await AudioController().play('Complete.mp3');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    Future.delayed(const Duration(microseconds: 500)).whenComplete(() {
+      _complete();
+    });
     _firstStarController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -278,11 +287,6 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
             ),
             curve:
                 widget.args.stars < 3.15 ? Curves.easeOut : Curves.easeOutExpo,
-            onEnd: () async {
-              if (widget.args.stars >= 3.0) {
-                await AudioController().play('Three_Stars.mp3');
-              }
-            },
             builder: (context, progress, _) {
               if (progress > 1 / 3) {
                 _firstStarController.forward();
