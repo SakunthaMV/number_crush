@@ -12,49 +12,41 @@ class Algorithm {
     1: {
       'operators': ['+', '-'],
       'maxOparand': [10],
-      'maxAnsDigit': 2,
       'numberOfQuestion': 2
     },
     2: {
       'operators': ['+', '-', '*'],
       'maxOparand': [100, 10],
-      'maxAnsDigit': 3,
       'numberOfQuestion': 3
     },
     3: {
       'operators': ['+', '-', '*', '/'],
       'maxOparand': [100, 10],
-      'maxAnsDigit': 3,
       'numberOfQuestion': 3
     },
     4: {
       'operators': ['+', '-', '*', '/'],
       'maxOparand': [1000, 100],
-      'maxAnsDigit': 4,
       'numberOfQuestion': 4
     },
     5: {
       'operators': ['+', '-', '*', '/', 'squre'],
       'maxOparand': [1000, 100, 100],
-      'maxAnsDigit': 4,
       'numberOfQuestion': 4
     },
     6: {
       'operators': ['+', '-', '*', '/', 'squre', 'squreRoot'],
       'maxOparand': [10000, 100, 100],
-      'maxAnsDigit': 5,
       'numberOfQuestion': 4
     },
     7: {
       'operators': ['+', '-', '*', '/', 'squre', 'squreRoot', 'log'],
       'maxOparand': [10000, 100, 100, 10],
-      'maxAnsDigit': 5,
       'numberOfQuestion': 5
     },
     8: {
       'operators': ['+', '-', '*', '/', 'squre', 'squreRoot', 'log'],
       'maxOparand': [100000, 1000, 100, 10],
-      'maxAnsDigit': 6,
       'numberOfQuestion': 6
     }
   };
@@ -319,44 +311,27 @@ class Algorithm {
     return question;
   }
 
-  int _startValue(int stageId) {
-    return 100 * (stageId - 1) + 2 * stageId;
+  int startValue(int stageId) {
+    return 102 * (stageId - 1);
   }
 
-  Future<List<Level>> levelGenerator(int stageId) async {
-    List<Level> levelList = [];
-    levelList.add(Level.withStatus(stageId, 'Unlocked'));
-    DatabaseFunctions databaseFunctions = DatabaseFunctions();
-    for (int i = 0; i < 49; i++) {
-      if (i < 9) {
-        Level level = Level(
-            _startValue(stageId) + i - await databaseFunctions.getStars(),
-            stageId);
-        levelList.add(level);
-      } else if (i < 39) {
-        Level level = Level(
-            _startValue(stageId) +
-                2 * (i - 8) +
-                8 -
-                await databaseFunctions.getStars(),
-            stageId);
-        levelList.add(level);
-      } else {
-        Level level = Level(
-            _startValue(stageId) +
-                3 * (i - 38) +
-                68 -
-                await databaseFunctions.getStars(),
-            stageId);
-        levelList.add(level);
-      }
+  int toUnlockStar(int level) {
+    int stageId = (level / 50).ceil();
+    int levelId = (level % 50);
+    if (levelId == 1) {
+      return startValue(stageId);
+    } else if (levelId < 11) {
+      return startValue(stageId) + levelId;
+    } else if (levelId < 41) {
+      return startValue(stageId) + 2 * (levelId - 10) + 10;
+    } else {
+      return startValue(stageId) + 3 * (levelId - 40) + 70;
     }
-    return levelList;
   }
 
   Future<Stage> stageGenerator(int stageId) async {
     DatabaseFunctions db = DatabaseFunctions();
-    Stage stage = Stage(_startValue(stageId) - 2 - await db.getStars());
+    Stage stage = Stage(startValue(stageId) - 2 - await db.getStars());
     return stage;
   }
 

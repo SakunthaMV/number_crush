@@ -45,10 +45,8 @@ class DatabaseHelper {
       (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         stageId INTEGER,
-        status STRING,
         stars INTEGER,
         time DOUBLE,
-        forUnlock INTEGER,
         fullTime DOUBLE,
         doubleStar DOUBLE,
         FOREIGN KEY (stageID) REFERENCES stage (id)
@@ -77,7 +75,6 @@ class DatabaseHelper {
       AFTER UPDATE ON level
       FOR EACH ROW
       BEGIN
-      UPDATE level SET forUnlock = forUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
       UPDATE stage SET forUnlock = forUnlock - NEW.stars + OLD.stars WHERE status = 'Locked';
       UPDATE stage SET stars = stars + NEW.stars - OLD.stars WHERE id = NEW.stageId ;
       END
@@ -88,26 +85,20 @@ class DatabaseHelper {
       AFTER UPDATE ON level
       FOR EACH ROW
       BEGIN
-      UPDATE stage SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0;
-      UPDATE level SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0;
+      UPDATE stage SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0; 
       END
       ''');
-
-    await db.execute('''
-      CREATE TRIGGER update_status_level
-      AFTER UPDATE ON level
-      FOR EACH ROW
-      BEGIN
-      UPDATE level SET status = 'Unlocked', forUnlock = 0 WHERE forUnlock <= 0;
-      END
-      ''');
-
-    await db.execute(''' CREATE INDEX status_Index ON level(status) ''');
-
-    await db.execute(''' CREATE INDEX forUnlock_Index ON level(forUnlock) ''');
 
     await db.rawInsert('''
       INSERT INTO stage(stars,status,forUnlock) VALUES(0,'Unlocked',0);
+      ''');
+
+    await db.rawInsert('''
+      INSERT INTO stage(stars,status,forUnlock) VALUES(0,'Locked',102);
+      ''');
+
+    await db.rawInsert('''
+      INSERT INTO level(stageId,stars,time,fulltime,doubleStar) VALUES(1,0,0,0,0);
       ''');
 
     await db.rawInsert(''' 
