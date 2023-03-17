@@ -78,7 +78,9 @@ class _RewardState extends State<Reward> with TickerProviderStateMixin {
         curve: Curves.elasticOut,
       ),
     );
-    _finalAnimationController.play();
+    if (widget.args.stars > 0.99) {
+      _finalAnimationController.play();
+    }
   }
 
   @override
