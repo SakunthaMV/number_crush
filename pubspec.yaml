@@ -41,7 +41,6 @@ dependencies:
   confetti: any
   audioplayers: any
   vibration: any
-  loading_animation_widget: any
   shimmer: any
   # flutter_launcher_icons: ^0.12.0
 

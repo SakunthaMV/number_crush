@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'audio_controller.dart';
+
 class CountUpAnimation extends StatefulWidget {
   final int targetNumber;
   final Duration duration;
@@ -32,6 +34,11 @@ class _CountUpAnimationState extends State<CountUpAnimation>
       setState(() {
         _currentNumber = (_animation.value * widget.targetNumber).floor();
       });
+    });
+    _controller.addStatusListener((status) async {
+      if(status == AnimationStatus.completed && widget.targetNumber==3){
+        await AudioController().play('Three_Stars.mp3');
+      }
     });
     _controller.forward();
   }
