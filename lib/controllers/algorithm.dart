@@ -296,11 +296,23 @@ class Algorithm {
         }
         answerSet.add(ans);
       }
-    } else {
+    } else if (result < 135) {
       while (answerSet.length != 3) {
         int ans =
             (result * 0.85 + random.nextInt((result * 0.3).round())).round();
         if (ans == result) {
+          continue;
+        }
+        answerSet.add(ans);
+      }
+    } else {
+      int lastDigit = result % 10;
+      while (answerSet.length != 3) {
+        int ans =
+            (result * 0.85 + random.nextInt((result * 0.3).round())).round();
+        if (ans == result) {
+          continue;
+        } else if (ans % 10 != lastDigit) {
           continue;
         }
         answerSet.add(ans);
