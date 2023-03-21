@@ -287,24 +287,14 @@ class Algorithm {
   List<int> _answerList(int lastDigit, int sameDigitAns, int result) {
     Set<int> answerSet = {};
     if (result < 15) {
-      while (answerSet.length != sameDigitAns) {
+      while (answerSet.length != 3) {
         int ans = random.nextInt(15);
         if (ans == result) {
           continue;
         }
         answerSet.add(ans);
       }
-    } else if (result < 135) {
-      while (answerSet.length != sameDigitAns) {
-        int ans =
-            (result * 0.85 + random.nextInt((result * 0.3).round())).round();
-        if (ans == result) {
-          continue;
-        }
-        answerSet.add(ans);
-      }
-    } else {
-      int lastDigit = result % 10;
+    } else if (result > 135) {
       while (answerSet.length != sameDigitAns) {
         int ans =
             (result * 0.85 + random.nextInt((result * 0.3).round())).round();
@@ -316,18 +306,14 @@ class Algorithm {
         answerSet.add(ans);
       }
     }
-
     while (answerSet.length != 3) {
       int ans =
           (result * 0.85 + random.nextInt((result * 0.3).round())).round();
       if (ans == result) {
         continue;
-      } else if (ans % 10 != lastDigit) {
-        continue;
       }
       answerSet.add(ans);
     }
-
     return answerSet.toList();
   }
 
@@ -335,11 +321,11 @@ class Algorithm {
     int result = question.correctAns;
     int lastDigit = result % 10;
     List<int> answer = [];
-    if (question.levelId < 50) {
+    if (question.levelId < 100) {
       answer = _answerList(lastDigit, 0, result);
-    } else if (question.levelId < 100) {
-      answer = _answerList(lastDigit, 1, result);
     } else if (question.levelId < 200) {
+      answer = _answerList(lastDigit, 1, result);
+    } else if (question.levelId < 500) {
       answer = _answerList(lastDigit, 2, result);
     } else {
       answer = _answerList(lastDigit, 3, result);
