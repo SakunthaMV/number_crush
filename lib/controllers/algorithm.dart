@@ -182,7 +182,7 @@ class Algorithm {
     Set<int> answerSet = {};
     if (result < 15) {
       while (answerSet.length != 3) {
-        int ans = random.nextInt(15);
+        final int ans = random.nextInt(15);
         if (ans == result) {
           continue;
         }
@@ -190,7 +190,7 @@ class Algorithm {
       }
     } else if (result > 135) {
       while (answerSet.length != sameDigitAns) {
-        int ans =
+        final int ans =
             (result * 0.85 + random.nextInt((result * 0.3).round())).round();
         if (ans == result) {
           continue;
@@ -201,7 +201,7 @@ class Algorithm {
       }
     }
     while (answerSet.length != 3) {
-      int ans =
+      final int ans =
           (result * 0.85 + random.nextInt((result * 0.3).round())).round();
       if (ans == result) {
         continue;
