@@ -233,8 +233,8 @@ class Algorithm {
   }
 
   int toUnlockStar(int level) {
-    int stageId = (level / 50).ceil();
-    int levelId = (level % 50);
+    final int stageId = (level / 50).ceil();
+    final int levelId = (level % 50);
     if (levelId == 0) {
       return startValue(stageId) + 100;
     } else if (levelId == 1) {
