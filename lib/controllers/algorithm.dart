@@ -166,115 +166,16 @@ class Algorithm {
 
   List<Question> questionList(int level) {
     List<Question> questionList = [];
-    switch (_questionRange(level)) {
-      case 1:
-        {
-          int numberOfQuestion = 2;
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[1]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
-      case 2:
-        {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[2]['numberOfQuestion'] - 1);
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[2]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
-      case 3:
-        {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[3]['numberOfQuestion'] - 1);
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[3]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
-      case 4:
-        {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[4]['numberOfQuestion'] - 1);
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[4]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
-      case 5:
-        {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[5]['numberOfQuestion'] - 1);
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[5]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
-      case 6:
-        {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[6]['numberOfQuestion'] - 1);
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[6]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
-      case 7:
-        {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[7]['numberOfQuestion'] - 1);
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[7]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
-      case 8:
-        {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[8]['numberOfQuestion'] - 1);
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[8]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
-      default:
-        {
-          int numberOfQuestion =
-              2 + random.nextInt(_data[8]['numberOfQuestion'] - 1);
-          for (int i = 0; i < numberOfQuestion; i++) {
-            Question question = _questionGenerator(_data[8]);
-            question.levelId = level;
-            question = _answerGenerator(question);
-            questionList.add(question);
-          }
-          return questionList;
-        }
+    final int range = _questionRange(level);
+    final int numberOfQuestion =
+        2 + random.nextInt(_data[range]['numberOfQuestion'] - 1);
+    for (int i = 0; i < numberOfQuestion; i++) {
+      Question question = _questionGenerator(_data[range]);
+      question.levelId = level;
+      question = _answerGenerator(question);
+      questionList.add(question);
     }
+    return questionList;
   }
 
   List<int> _answerList(int lastDigit, int sameDigitAns, int result) {
