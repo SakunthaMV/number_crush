@@ -34,11 +34,13 @@ class _StageHomeState extends State<StageHome> {
         context.size!.height -
         appBarHeight -
         statusBarHeight;
-    final double value = (pos / 17) * height -
-        (context.size!.height / 2 -
-            appBarHeight -
-            statusBarHeight -
-            ((1 / 17) * height) / 2);
+    final double scrollValue = (pos / 17) * height;
+    final double reduceValue = context.size!.height / 2 -
+        appBarHeight -
+        statusBarHeight -
+        ((1 / 17) * height) / 2;
+    final double value =
+        scrollValue > reduceValue ? scrollValue - reduceValue : 0.0;
     final double newValue = value > _controller.position.maxScrollExtent
         ? _controller.position.maxScrollExtent
         : value;
@@ -145,7 +147,9 @@ class _StageHomeState extends State<StageHome> {
                               backgroundColor: appBarTheme.backgroundColor,
                               content: Center(
                                 child: Text(
-                                    'You Need ${unlockStars - totalStars} More Stars to Unlock This Level'),
+                                  'You Need ${unlockStars - totalStars} More '
+                                  'Stars to Unlock This Level',
+                                ),
                               ),
                             ),
                           );
