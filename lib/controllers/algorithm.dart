@@ -85,21 +85,23 @@ class Algorithm {
   }
 
   int _questionRange(int level) {
-    return 0 < level && level < 11
-        ? 1
-        : 10 < level && level < 51
-            ? 2
-            : 50 < level && level < 101
-                ? 3
-                : 100 < level && level < 201
-                    ? 4
-                    : 200 < level && level < 501
-                        ? 5
-                        : 500 < level && level < 1001
-                            ? 6
-                            : 1000 < level && level < 2001
-                                ? 7
-                                : 8;
+    if (0 < level && level <= 10) {
+      return 1;
+    } else if (10 < level && level <= 50) {
+      return 2;
+    } else if (50 < level && level <= 100) {
+      return 3;
+    } else if (100 < level && level <= 200) {
+      return 4;
+    } else if (200 < level && level <= 500) {
+      return 5;
+    } else if (500 < level && level <= 1000) {
+      return 6;
+    } else if (1000 < level && level <= 2000) {
+      return 7;
+    } else {
+      return 8;
+    }
   }
 
   Question _questionGenerator(Map<String, dynamic> dataMap) {
