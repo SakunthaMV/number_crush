@@ -284,11 +284,10 @@ class Algorithm {
     }
   }
 
-  Question _answerGenerator(Question question) {
-    int result = question.correctAns;
+  List<int> _answerList(int lastDigit, int sameDigitAns, int result) {
     Set<int> answerSet = {};
     if (result < 15) {
-      while (answerSet.length != 3) {
+      while (answerSet.length != sameDigitAns) {
         int ans = random.nextInt(15);
         if (ans == result) {
           continue;
@@ -296,7 +295,7 @@ class Algorithm {
         answerSet.add(ans);
       }
     } else if (result < 135) {
-      while (answerSet.length != 3) {
+      while (answerSet.length != sameDigitAns) {
         int ans =
             (result * 0.85 + random.nextInt((result * 0.3).round())).round();
         if (ans == result) {
@@ -306,7 +305,7 @@ class Algorithm {
       }
     } else {
       int lastDigit = result % 10;
-      while (answerSet.length != 3) {
+      while (answerSet.length != sameDigitAns) {
         int ans =
             (result * 0.85 + random.nextInt((result * 0.3).round())).round();
         if (ans == result) {
@@ -317,7 +316,34 @@ class Algorithm {
         answerSet.add(ans);
       }
     }
-    List<int> answer = answerSet.toList();
+
+    while (answerSet.length != 3) {
+      int ans =
+          (result * 0.85 + random.nextInt((result * 0.3).round())).round();
+      if (ans == result) {
+        continue;
+      } else if (ans % 10 != lastDigit) {
+        continue;
+      }
+      answerSet.add(ans);
+    }
+
+    return answerSet.toList();
+  }
+
+  Question _answerGenerator(Question question) {
+    int result = question.correctAns;
+    int lastDigit = result % 10;
+    List<int> answer = [];
+    if (question.levelId < 50) {
+      answer = _answerList(lastDigit, 0, result);
+    } else if (question.levelId < 100) {
+      answer = _answerList(lastDigit, 1, result);
+    } else if (question.levelId < 200) {
+      answer = _answerList(lastDigit, 2, result);
+    } else {
+      answer = _answerList(lastDigit, 3, result);
+    }
     question.setAnswer(answer);
     return question;
   }
