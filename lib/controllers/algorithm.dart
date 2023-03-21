@@ -248,17 +248,19 @@ class Algorithm {
     }
   }
 
+  final DatabaseFunctions db = DatabaseFunctions();
   Future<Stage> stageGenerator(int stageId) async {
-    DatabaseFunctions db = DatabaseFunctions();
     Stage stage = Stage(startValue(stageId) - 2 - await db.getStars());
     return stage;
   }
 
   Future<double> calculateStars(
-      List<bool> result, int level, double usedTime) async {
-    DatabaseFunctions db = DatabaseFunctions();
-    List<Question> questions = await db.getQuestions(level);
-    double givenTime = 0;
+    List<bool> result,
+    int level,
+    double usedTime,
+  ) async {
+    final List<Question> questions = await db.getQuestions(level);
+    double givenTime = 0.0;
     double correctTime = 0.0;
     for (int i = 0; i < questions.length; i++) {
       if (result[i]) {
