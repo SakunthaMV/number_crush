@@ -212,8 +212,8 @@ class Algorithm {
   }
 
   Question _answerGenerator(Question question) {
-    int result = question.correctAns;
-    int lastDigit = result % 10;
+    final int result = question.correctAns;
+    final int lastDigit = result % 10;
     List<int> answer = [];
     if (question.levelId < 100) {
       answer = _answerList(lastDigit, 0, result);
