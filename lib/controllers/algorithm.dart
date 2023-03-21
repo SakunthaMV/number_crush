@@ -317,7 +317,9 @@ class Algorithm {
   int toUnlockStar(int level) {
     int stageId = (level / 50).ceil();
     int levelId = (level % 50);
-    if (levelId == 1) {
+    if (levelId == 0) {
+      return startValue(stageId) + 100;
+    } else if (levelId == 1) {
       return startValue(stageId);
     } else if (levelId < 11) {
       return startValue(stageId) + levelId;
