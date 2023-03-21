@@ -66,7 +66,7 @@ class Algorithm {
   }
 
   double _timeForQuesion(int type, int size_1, int size_2) {
-    double scale = 1.3;
+    const double scale = 1.3;
     switch (type) {
       case 0:
         int t = 3 + size_1 * size_2 * 1;
@@ -105,13 +105,13 @@ class Algorithm {
   }
 
   Question _questionGenerator(Map<String, dynamic> dataMap) {
-    String operator =
+    final String operator =
         dataMap['operators'][random.nextInt(dataMap['operators'].length)];
-    int operatorType = _findTypeOfOperator(_operatorList, operator);
-    int operandDigit = dataMap['maxOparand'][operatorType];
+    final int operatorType = _findTypeOfOperator(_operatorList, operator);
+    final int operandDigit = dataMap['maxOparand'][operatorType];
     int operand_1 = random.nextInt(operandDigit);
     int operand_2 = 1 + random.nextInt(operandDigit - 1);
-    double t = double.parse((_timeForQuesion(
+    final double t = double.parse((_timeForQuesion(
             operatorType, '$operand_1'.length, '$operand_2'.length))
         .toStringAsFixed(2));
     int result = 0;
@@ -122,7 +122,7 @@ class Algorithm {
         result = operand_1 - operand_2;
       } else {
         result = operand_2 - operand_1;
-        int temp = operand_1;
+        final int temp = operand_1;
         operand_1 = operand_2;
         operand_2 = temp;
       }
@@ -130,14 +130,14 @@ class Algorithm {
       result = operand_1 * operand_2;
     } else if (operator == '/') {
       result = operand_1 * operand_2;
-      int temp = result;
+      final int temp = result;
       result = operand_1;
       operand_1 = temp;
     } else if (operator == 'squre') {
       result = pow(operand_1, 2) as int;
     } else if (operator == 'squreRoot') {
       result = pow(operand_1, 2) as int;
-      int temp = result;
+      final int temp = result;
       result = operand_1;
       operand_1 = temp;
     } else {
@@ -145,11 +145,11 @@ class Algorithm {
         result = pow(operand_1, operand_2) as int;
       } else {
         result = pow(operand_2, operand_1) as int;
-        int temp = operand_1;
+        final int temp = operand_1;
         operand_1 = operand_2;
         operand_2 = temp;
       }
-      int temp = result;
+      final int temp = result;
       result = operand_2;
       operand_2 = temp;
     }
