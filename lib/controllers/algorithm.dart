@@ -153,14 +153,14 @@ class Algorithm {
       result = operand_2;
       operand_2 = temp;
     }
-    Map<String, dynamic> map = {
+    final Map<String, dynamic> map = {
       'operator': operator,
       'operand_1': operand_1,
       'operand_2': operand_2,
       'correctAns': result,
       'time': t,
     };
-    Question question = Question.fromMap(map);
+    final Question question = Question.fromMap(map);
     return question;
   }
 
