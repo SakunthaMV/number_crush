@@ -6,7 +6,6 @@ import '../Models/stage.dart';
 
 class Algorithm {
   Random random = Random();
-
   final Map<int, dynamic> _data = {
     1: {
       'operators': ['+', '-'],
@@ -70,25 +69,17 @@ class Algorithm {
     double scale = 1.3;
     switch (type) {
       case 0:
-        {
-          int t = 3 + size_1 * size_2 * 1;
-          return t / scale;
-        }
+        int t = 3 + size_1 * size_2 * 1;
+        return t / scale;
       case 1:
-        {
-          int t = 2 + size_1 * size_2 * 4;
-          return t / scale;
-        }
+        int t = 2 + size_1 * size_2 * 4;
+        return t / scale;
       case 2:
-        {
-          int t = 3 + size_1 * size_2 * 3;
-          return t / scale;
-        }
+        int t = 3 + size_1 * size_2 * 3;
+        return t / scale;
       case 3:
-        {
-          int t = 2 + size_1 * size_2 * 2;
-          return t / scale;
-        }
+        int t = 2 + size_1 * size_2 * 2;
+        return t / scale;
     }
     return 0.0;
   }
