@@ -28,13 +28,33 @@ Number Crush has unlimited stages and levels to play, so you will never run out 
  If you have any questions, comments, or suggestions, please do not hesitate to contact us. You can reach us at
 
  Sakuntha Hansaka: sakunthasugathadasa@gmail.com
+
  Thamindu Manodya: thamindumanodya285@gmail.com
+
  MHDEVELOPER: magichackers0101@gmail.com
 
  we have developed several other apps and published under MHDEVELOPER account.
 
- [**Number Crush**](https://www.google.com/)
+ **Download** :- [**Number Crush**](https://www.google.com/)
 
- here are some screenshots of our app.
+ ## Some Screenshots of Number Crush.
 
- ![HomePage](https://user-images.githubusercontent.com/104773152/226858417-6caceb00-e46c-4e55-8738-fb4ce287dbab.png | width =100)
+ ### Home Screen
+
+ ![Home](https://user-images.githubusercontent.com/104773152/226888837-fc0d7e16-d823-4663-94eb-804e0178076b.gif)
+
+ ### Stages Screen
+
+ ![Stages_Screen](https://user-images.githubusercontent.com/104773152/226889238-cc95f010-0d3f-4f46-9680-a58606769e4a.png)
+
+ ### Levels Screen
+
+![Stage_Home](https://user-images.githubusercontent.com/104773152/226890940-06d2aea5-5ff8-4103-ac4f-75481d7ea216.gif)
+
+### Question Screen
+
+![Question_Screen](https://user-images.githubusercontent.com/104773152/226892063-a88a0b7f-96d4-4b02-bfe7-13bc71554c41.gif)
+
+### Reward Screen
+
+![Reward](https://user-images.githubusercontent.com/104773152/226892824-2a0b785f-63d3-4941-817a-923d07cfec72.gif)
