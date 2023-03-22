@@ -1,4 +1,4 @@
-package com.example.number_crush
+package com.mhdeveloper.number_crush
 
 import io.flutter.embedding.android.FlutterActivity
 
