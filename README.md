@@ -1,4 +1,4 @@
-# Number Crush
+# Number Crush - Beat the Numbers
 Number Crush is an addictive math game that uses 7 different mathematical operators to challenge players. Players must solve small math problems to progress through levels and earn stars. With unlimited stages and levels to play, users can practice and hone their math skills while enjoying the game.
 
 Number Crush is available on both Android and iOS devices and is suitable for anyone who knows about numbers and operators. Developed by two undergraduate engineers, Sakuntha Hansaka and Thamindu Manodya, Number Crush is a unique and fun way to learn math.
