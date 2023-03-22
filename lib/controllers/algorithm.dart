@@ -66,7 +66,7 @@ class Algorithm {
   }
 
   double _timeForQuesion(int type, int size_1, int size_2) {
-    const double scale = 1.3;
+    const double scale = 1.1;
     switch (type) {
       case 0:
         int t = 3 + size_1 * size_2 * 1;
@@ -229,22 +229,22 @@ class Algorithm {
   }
 
   int startValue(int stageId) {
-    return 102 * (stageId - 1);
+    return 112 * (stageId - 1);
   }
 
   int toUnlockStar(int level) {
     final int stageId = (level / 50).ceil();
     final int levelId = (level % 50);
     if (levelId == 0) {
-      return startValue(stageId) + 100;
+      return startValue(stageId) + 110;
     } else if (levelId == 1) {
       return startValue(stageId);
     } else if (levelId < 11) {
       return startValue(stageId) + levelId;
-    } else if (levelId < 41) {
+    } else if (levelId < 31) {
       return startValue(stageId) + 2 * (levelId - 10) + 10;
     } else {
-      return startValue(stageId) + 3 * (levelId - 40) + 70;
+      return startValue(stageId) + 3 * (levelId - 30) + 50;
     }
   }
 

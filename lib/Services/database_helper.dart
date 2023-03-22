@@ -94,7 +94,7 @@ class DatabaseHelper {
       ''');
 
     await db.rawInsert('''
-      INSERT INTO stage(stars,status,forUnlock) VALUES(0,'Locked',102);
+      INSERT INTO stage(stars,status,forUnlock) VALUES(0,'Locked',112);
       ''');
 
     await db.rawInsert('''
