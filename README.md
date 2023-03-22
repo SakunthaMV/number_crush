@@ -37,4 +37,4 @@ Number Crush has unlimited stages and levels to play, so you will never run out 
 
  here are some screenshots of our app.
 
- ![HomePage](https://user-images.githubusercontent.com/104773152/226858417-6caceb00-e46c-4e55-8738-fb4ce287dbab.png)
+ ![HomePage](https://user-images.githubusercontent.com/104773152/226858417-6caceb00-e46c-4e55-8738-fb4ce287dbab.png | width =100)
