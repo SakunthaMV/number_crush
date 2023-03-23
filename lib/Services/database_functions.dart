@@ -69,8 +69,12 @@ class DatabaseFunctions {
 
 // update level done details
   Future<void> updateLevel(
-      int star, int id, double time, double doubleStar) async {
-    Database db = await _dbHelper.database;
+    int star,
+    int id,
+    double time,
+    double doubleStar,
+  ) async {
+    final Database db = await _dbHelper.database;
     await db.rawUpdate(
         ''' UPDATE level SET stars = ? , time = ?, doubleStar = ? WHERE id = ? ''',
         [star, time, doubleStar, id]);
@@ -79,12 +83,12 @@ class DatabaseFunctions {
         ''' UPDATE level SET stars = ? , time = ?, doubleStar = ? WHERE id = ? ''',
         [star, time, doubleStar, id]);
 
-    List<Map<String, dynamic>> result = await db.rawQuery(
+    final List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT status,id FROM stage WHERE id = (SELECT MAX(id) FROM stage) ''');
 
-    Algorithm algorithm = Algorithm();
-    int stars = await getStars();
-    int lastStage = await lastUnlockStage();
+    final Algorithm algorithm = Algorithm();
+    final int stars = await getStars();
+    final int lastStage = await lastUnlockStage();
     bool newStageAdd = false;
     if (result[0]['status'] == 'Unlocked') {
       newStageAdd = true;
@@ -94,7 +98,7 @@ class DatabaseFunctions {
     }
 
     for (int i = 1; i < 4; i++) {
-      int lastLevel = await lastUnlockLevel();
+      final int lastLevel = await lastUnlockLevel();
       if (algorithm.toUnlockStar(lastLevel + 1) <= stars &&
           lastLevel % 50 == 49 &&
           newStageAdd) {
@@ -112,8 +116,8 @@ class DatabaseFunctions {
 //get all levels as a list of objects of levels
   Future<List<Level>> getLevels(int stageId) async {
     List<Level> levelList = [];
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result = await db
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result = await db
         .rawQuery(''' SELECT * FROM level WHERE stageId = ? ''', [stageId]);
     for (int i = 0; i < result.length; i++) {
       Level level = Level.fromMap(result[i]);
@@ -124,31 +128,31 @@ class DatabaseFunctions {
 
 // update given time for this level
   Future<void> updateLevelFullTime(int level, double fullTime) async {
-    Database database = await _dbHelper.database;
+    final Database database = await _dbHelper.database;
     await database.rawUpdate(
         ''' UPDATE level SET fullTime = ? WHERE id = ? ''', [fullTime, level]);
   }
 
 // get float number of stars and
   Future<double> getDoubleStar(int level) async {
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result = await db
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result = await db
         .rawQuery(''' SELECT doubleStar FROM level WHERE id = ? ''', [level]);
     return result[0]['doubleStar'];
   }
 
 // check weather this level is unlocked or not
   Future<bool> isUnlock(int level) async {
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result = await db.rawQuery(
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT COUNT(id) AS id FROM level WHERE id = ? ''', [level]);
     return result[0]['id'] < 1 ? false : true;
   }
 
 // to get last unlock level
   Future<int> lastUnlockLevel() async {
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result =
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result =
         await db.rawQuery(''' SELECT MAX(id) AS id FROM level''');
     return result[0]['id'];
   }
