@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../Services/database_functions.dart';
-
 class OpenSplash extends StatefulWidget {
   static const String route = 'splash';
   const OpenSplash({Key? key}) : super(key: key);
@@ -15,17 +13,9 @@ class OpenSplash extends StatefulWidget {
 }
 
 class _OpenSplashState extends State<OpenSplash> {
-  void _checkDatabase() async {
-    DatabaseFunctions db = DatabaseFunctions();
-    final bool exist = await db.isExistDataBase(1);
-    if (!exist) {
-      await db.insert(1);
-    }
-  }
 
   @override
   void initState() {
-    _checkDatabase();
     Timer(const Duration(milliseconds: 2500), () {
       Navigator.pushNamed(context, '/');
     });

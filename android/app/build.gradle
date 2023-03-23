@@ -49,8 +49,8 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.number_crush"
-        minSdkVersion flutter.minSdkVersion
+        applicationId "com.mhdeveloper.number_crush"
+        minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -67,7 +67,7 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }

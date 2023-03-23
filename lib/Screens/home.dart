@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:number_crush/Screens/Widgets/common_background.dart';
 import 'package:number_crush/Screens/settings.dart';
 import 'package:number_crush/Screens/stage_home.dart';
@@ -9,6 +10,7 @@ import 'package:number_crush/Screens/stages.dart';
 import 'package:number_crush/Services/database_functions.dart';
 import 'package:number_crush/controllers/audio_controller.dart';
 import 'package:number_crush/controllers/vibration_controller.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -52,46 +54,91 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
         return Future.value(false);
       },
       child: CommonBackground(
-        content: Padding(
-          padding: EdgeInsets.symmetric(horizontal: width * 0.1),
-          child: FutureBuilder(
-            future: _currentLevel(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const SizedBox.shrink();
-              }
-              final int level = snapshot.data!;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  homeRow(
-                    context,
-                    Icons.play_arrow,
-                    'PLAY',
-                    '${level < 2 ? 'Start' : 'Continue'} Your Journey',
+        content: Column(
+          children: [
+            Center(
+              child: Container(
+                width: width * 0.5,
+                margin: EdgeInsets.only(left: width * 0.2, top: height * 0.1),
+                child: Shimmer.fromColors(
+                  period: const Duration(milliseconds: 3000),
+                  baseColor: colorScheme.secondary,
+                  highlightColor: colorScheme.background,
+                  child: FittedBox(
+                    child: RichText(
+                      text: TextSpan(
+                        style: GoogleFonts.cinzel(
+                          fontSize: 50,
+                          letterSpacing: 0.4,
+                          height: 1,
+                          color: colorScheme.onPrimary,
+                        ),
+                        children: [
+                          const TextSpan(
+                            text: 'NUMBER',
+                          ),
+                          TextSpan(
+                            text: '\nCRUSH',
+                            style: TextStyle(
+                              fontSize: 80,
+                              color: colorScheme.secondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  homeRow(
-                    context,
-                    Icons.event,
-                    'STAGES',
-                    'Currant Level: $level',
-                  ),
-                  homeRow(
-                    context,
-                    Icons.settings,
-                    'SETTINGS',
-                    'Change Your Preference',
-                  ),
-                ],
-              );
-            },
-          ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                right: width * 0.1,
+                left: width * 0.1,
+                top: height * 0.15,
+              ),
+              child: FutureBuilder(
+                future: _currentLevel(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const SizedBox.shrink();
+                  }
+                  final int level = snapshot.data!;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      homeRow(
+                        context,
+                        Icons.play_arrow,
+                        'PLAY',
+                        '${level < 2 ? 'Start' : 'Continue'} Your Journey',
+                      ),
+                      homeRow(
+                        context,
+                        Icons.event,
+                        'STAGES',
+                        'Currant Level: $level',
+                      ),
+                      homeRow(
+                        context,
+                        Icons.settings,
+                        'SETTINGS',
+                        'Change Your Preference',
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -234,6 +281,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       });
     } else if (topic == 'SETTINGS') {
       Navigator.pushNamed(context, Settings.route);
+      await AudioController().play('Normal_Buttons.mp3');
     }
   }
 }
@@ -246,17 +294,16 @@ class CometAnimate extends CustomPainter {
     border.strokeWidth = 2.0;
     border.shader = SweepGradient(
       colors: [
-        const Color(0xFFffd200),
-        Colors.yellow,
-        Colors.yellow.withAlpha(0),
+        const Color(0xFFA8BDF4),
+        const Color(0xFFA8BDF4).withAlpha(0),
       ],
-      stops: const [0.0, 0.1, 0.45],
+      stops: const [0.0, 0.45],
     ).createShader(Rect.fromLTRB(0, 0, size.width, size.height));
     canvas.drawCircle(size.center(const Offset(0, 0)), size.width / 2, border);
 
     Paint dot = Paint();
     dot.style = PaintingStyle.fill;
-    dot.color = const Color(0xFFffd200);
+    dot.color = const Color(0xFFA8BDF4);
     canvas.drawCircle(size.centerRight(const Offset(0, 0)), 2.5, dot);
   }
 
