@@ -161,7 +161,7 @@ class DatabaseFunctions {
 
 //store questions in the database
   Future<void> storeQuestion(Question question) async {
-    Database db = await _dbHelper.database;
+    final Database db = await _dbHelper.database;
     await db.rawInsert(''' 
       INSERT INTO question(levelId,operand_1,operand_2,operator,ans_1,ans_2,ans_3,correctAns,time) VALUES(?,?,?,?,?,?,?,?,?)
      ''', [
@@ -180,8 +180,8 @@ class DatabaseFunctions {
 // get all question as a list of objects of questions
   Future<List<Question>> getQuestions(int levelId) async {
     List<Question> questionList = [];
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> list = await db
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> list = await db
         .rawQuery(''' SELECT * FROM question WHERE levelId = ? ''', [levelId]);
 
     for (int i = 0; i < list.length; i++) {
@@ -193,16 +193,16 @@ class DatabaseFunctions {
 // is this levelId existed in question
 
   Future<bool> ifExist(int level) async {
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result = await db.rawQuery(
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT COUNT(levelId) AS existing FROM question WHERE levelId = ?  ''',
         [level]);
     return result[0]['existing'] > 0 ? true : false;
   }
 
   Future<bool> isExistDataBase(int level) async {
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result = await db.rawQuery(
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT COUNT(id) AS existing FROM level WHERE id = ?  ''', [level]);
     return result[0]['existing'] > 0 ? true : false;
   }
