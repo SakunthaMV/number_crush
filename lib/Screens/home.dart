@@ -100,8 +100,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.1, vertical: height * 0.15),
+              padding: EdgeInsets.only(
+                right: width * 0.1,
+                left: width * 0.1,
+                top: height * 0.15,
+              ),
               child: FutureBuilder(
                 future: _currentLevel(),
                 builder: (context, snapshot) {
