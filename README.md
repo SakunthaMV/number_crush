@@ -35,7 +35,7 @@ Number Crush has unlimited stages and levels to play, so you will never run out 
 
  we have developed several other apps and published under MHDEVELOPER account.
 
- **Download** :- [**Number Crush**](https://www.google.com/)
+ **Download** :- [**Number Crush**](https://play.google.com/store/apps/details?id=com.mhdeveloper.number_crush)
 
  ## Some Screenshots of Number Crush.
 
