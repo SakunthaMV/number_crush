@@ -13,8 +13,8 @@ class DatabaseFunctions {
 //get status of relevant setting
   Future<bool> getSettingStatus(String key) async {
     bool status;
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result = await db
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result = await db
         .rawQuery(''' SELECT value FROM setting WHERE key = ? ''', [key]);
     result[0]['value'] == 1 ? status = true : status = false;
     return status;
@@ -22,7 +22,7 @@ class DatabaseFunctions {
 
 // set status of relevant setting
   void setSettingStatus(String key, bool value) async {
-    Database db = await _dbHelper.database;
+    final Database db = await _dbHelper.database;
     await db.rawUpdate(
         ''' UPDATE setting SET value = ? WHERE key = ?''', [value, key]);
   }
@@ -31,10 +31,10 @@ class DatabaseFunctions {
 
 //get all stages as list of objects of stage
   Future<List<Stage>> getStages() async {
-    Database db = await _dbHelper.database;
-    List<Stage> stageList = [];
-    List<Map<String, dynamic>> result =
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result =
         await db.rawQuery(''' SELECT * FROM stage ''');
+    List<Stage> stageList = [];
     for (int i = 0; i < result.length; i++) {
       Stage stage = Stage.fromMap(result[i]);
       stageList.add(stage);
@@ -45,22 +45,22 @@ class DatabaseFunctions {
 //store stage in the database
 
   Future getAll(String tableName) async {
-    Database db = await _dbHelper.database;
+    final Database db = await _dbHelper.database;
     return await db.rawQuery(''' SELECT * FROM $tableName ''');
   }
 
 //get number of stars till that moment
   Future<int> getStars() async {
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> stars =
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> stars =
         await db.rawQuery(''' SELECT SUM(stars) AS stars FROM stage ''');
     return stars[0]['stars'];
   }
 
 // to get last unlock stage
   Future<int> lastUnlockStage() async {
-    Database db = await _dbHelper.database;
-    List<Map<String, dynamic>> result = await db.rawQuery(
+    final Database db = await _dbHelper.database;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
         ''' SELECT MAX(id) AS id FROM stage WHERE status = ? ''', ['Unlocked']);
     return result[0]['id'];
   }
