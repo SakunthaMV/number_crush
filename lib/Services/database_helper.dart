@@ -102,11 +102,11 @@ class DatabaseHelper {
       ''');
 
     await db.rawInsert(''' 
-      INSERT INTO setting VALUES('vibration',true);
+      INSERT INTO setting VALUES('vibration',1);
      ''');
 
     await db.rawInsert('''
-      INSERT INTO setting VALUES('sound',true);
+      INSERT INTO setting VALUES('sound',1);
       ''');
   }
 }
