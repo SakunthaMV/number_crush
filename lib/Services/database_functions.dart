@@ -84,24 +84,24 @@ class DatabaseFunctions {
 
     Algorithm algorithm = Algorithm();
     int stars = await getStars();
-    int lastLevel = await lastUnlockLevel();
     int lastStage = await lastUnlockStage();
-    bool newStageAdd = true;
+    bool newStageAdd = false;
     if (result[0]['status'] == 'Unlocked') {
-      newStageAdd = false;
+      newStageAdd = true;
       await db.rawInsert(
           ''' INSERT INTO stage(stars,status,forUnlock) VALUES(?,?,?) ''',
           [0, 'Locked', algorithm.startValue(result[0]['id'] + 1) - stars]);
     }
 
     for (int i = 1; i < 4; i++) {
-      if (algorithm.toUnlockStar(lastLevel + i) <= stars &&
+      int lastLevel = await lastUnlockLevel();
+      if (algorithm.toUnlockStar(lastLevel + 1) <= stars &&
           lastLevel % 50 == 49 &&
-          !newStageAdd) {
+          newStageAdd) {
         await db.rawInsert(
             '''INSERT INTO level(stageId,stars,time,fulltime,doubleStar) VALUES(?,?,?,?,?);''',
             [lastStage - 1, 0, 0, 0, 0]);
-      } else if (algorithm.toUnlockStar(lastLevel + i) <= stars) {
+      } else if (algorithm.toUnlockStar(lastLevel + 1) <= stars) {
         await db.rawInsert(
             '''INSERT INTO level(stageId,stars,time,fulltime,doubleStar) VALUES(?,?,?,?,?);''',
             [lastStage, 0, 0, 0, 0]);
