@@ -32,10 +32,10 @@ Number Crush has unlimited stages and levels to play, so you will never run out 
  Thamindu Manodya: thamindumanodya285@gmail.com
 
  MHDEVELOPER: magichackers0101@gmail.com
+ 
+ You can download our app according to your Mobile Phone Architecture. If you dont know about your phone architecture see this [Article](https://www.howtogeek.com/339665/how-to-find-your-android-devices-info-for-correct-apk-downloads/)
 
- we have developed several other apps and published under MHDEVELOPER account.
-
- **Download** :- [**Number Crush**](https://play.google.com/store/apps/details?id=com.mhdeveloper.number_crush)
+ **Download** :- [**Number Crush**](https://github.com/SakunthaMV/number_crush/release/latest)
 
  ## Some Screenshots of Number Crush.
 
