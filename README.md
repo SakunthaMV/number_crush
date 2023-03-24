@@ -35,7 +35,7 @@ Number Crush has unlimited stages and levels to play, so you will never run out 
  
  You can download our app according to your Mobile Phone Architecture. If you dont know about your phone architecture see this [Article](https://www.howtogeek.com/339665/how-to-find-your-android-devices-info-for-correct-apk-downloads/)
 
- **Download** :- [**Number Crush**](https://github.com/SakunthaMV/number_crush/release/latest)
+ **Download** :- [**Number Crush**](https://github.com/SakunthaMV/number_crush/releases/latest)
 
  ## Some Screenshots of Number Crush.
 
